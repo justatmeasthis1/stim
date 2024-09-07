@@ -8,8 +8,10 @@ if [ $HOST_ARCH == "x86_64" ]; then
   CGPT="$SCRIPT_DIR/bins/cgpt.x86-64"
   SFDISK="$SCRIPT_DIR/bins/sfdisk.x86-64"
 else
-  CGPT="$SCRIPT_DIR/bins/cgpt.aarch64"
-  SFDISK="$SCRIPT_DIR/bins/sfdisk.aarch64"
+  echo "Building on an ARM system is not supported currently"
+  exit
+  # CGPT="$SCRIPT_DIR/bins/cgpt.aarch64"
+  # SFDISK="$SCRIPT_DIR/bins/sfdisk.aarch64"
 fi
 
 source $SCRIPT_DIR/functions.sh
@@ -35,7 +37,7 @@ echo "Press ENTER to continue building!"
 read -r
 echo "-=-=-=-=-=-=-=-=-=-=-"
 
-#we need this before we re-create stateful
+# we need this before we re-create stateful
 STATE_START=$("$CGPT" show "$IMG" | grep "STATE" | awk '{print $1}')
 suppress shrink_partitions "$IMG"
 losetup -P "$LOOPDEV" "$IMG"
