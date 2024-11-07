@@ -20,3 +20,13 @@ bool fbool(const char *arg)
 
 	return false;
 }
+
+char *fequals(const char *arg)
+{
+	for (int i = 0; i < gargc; i++) {
+		if (!memcmp(gargv[i], arg, strlen(arg) - 1)) 
+			return gargv[i] + strlen(arg) + 1;
+	}
+
+	return "";
+}

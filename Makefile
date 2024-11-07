@@ -2,8 +2,9 @@ CC ?= gcc
 SHELL ?= /bin/sh
 KVSFLIST := \
 	src/KVS/main.c \
-	src/KVS/ui.c \
-	src/KVS/kernver-utils.c
+	src/KVS/tpm.c \
+	src/KVS/rmasmoke.c \
+	src/KVS/ui.c 
 
 CFLAGS := \
 	-Iinclude \
