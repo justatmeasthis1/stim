@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "2.0" ]
+  pull_request:
+    branches: [ "2.0" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: build-kvs
+      run: make kvs
+    - name: build-kvg
+      run: make kvg
