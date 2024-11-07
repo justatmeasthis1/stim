@@ -28,8 +28,16 @@ int main(int argc, char **argv) {
 	}
 	printf("You entered: %s\n", choice);
 
-	if (strcmp(choice, "1") == 0) {
+	if (!strcmp(choice, "1")) {
 		ui_flash("tpm0");
+	} else if (!strcmp(choice, "2")) {
+		ui_flash("rmasmoke");
+	} else if (!strcmp(choice, "3")) {
+		printf("wip");
+	} else if (!strcmp(choice, "4")) {
+		system("/bin/bash");
+	} else if (!strcmp(choice, "5")) {
+		exit(1);
 	}
 
 	return 0;
