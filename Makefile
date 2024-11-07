@@ -9,6 +9,8 @@ KVSFLIST := \
 CFLAGS := \
 	-Iinclude \
 	-g \
+	-O3 \
+	-Llib \
 	-static
 
 $(shell mkdir -p build)
