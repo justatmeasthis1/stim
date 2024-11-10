@@ -1,5 +1,9 @@
 # kvs
-KVS: Kernel Version Switcher, made to easily switch the tpm_kernver for Chromebooks.
+KVS: Kernel Version Switcher (anti-rollback rollbacker)
+[![build kvs](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml)
+[![build kvg](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml)
+
+
 
 ## Build Instructions
 1) Clone the repo: <br />
