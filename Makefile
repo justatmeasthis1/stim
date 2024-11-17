@@ -13,20 +13,24 @@ CFLAGS := \
 	-Llib \
 	-static
 
-$(shell mkdir -p build)
+all: clean build kvs kvg
 
-all: clean kvs kvg
+kvs: build/bin/kvs
+kvg: build/bin/kvg
 
-kvs: build/kvs
-kvg: build/kvg
+build:
+	$(shell mkdir -p build/bin)
 
-build/kvs: src/KVS/main.c
-	$(CC) $(KVSFLIST) -o build/kvs $(CFLAGS)
-	chmod +rx build/kvs
+build/bin/kvs: src/KVS/main.c
+	$(CC) $(KVSFLIST) -o build/bin/kvs $(CFLAGS)
+	chmod +rx build/bin/kvs
 
-build/kvg: src/KVG/main.c
-	$(CC) src/KVG/main.c -o build/kvg $(CFLAGS)
-	chmod +rx build/kvg
+build/bin/kvg: src/KVG/main.c
+	$(CC) src/KVG/main.c -o build/bin/kvg $(CFLAGS)
+	chmod +rx build/bin/kvg
+
+install:
+	cp -r build/* /usr/local/
 
 clean:
 	rm -rf build
