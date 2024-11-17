@@ -12,8 +12,10 @@ int main(int argc, char **argv) {
 	char* gscver = "0.5.229";
 	char* gsctype = "Cr50";
 
+	
+
 	// only allow 2 characters (option & newline)
-	char choice[2];
+	char choice[3];
 
 	ui_header(fwver, kernver, tpmver, fwmp, gscver, gsctype);
 	printf("1) Flash new kernver via /dev/tpm0 (REQ. UNENROLLED)\n");
@@ -24,9 +26,8 @@ int main(int argc, char **argv) {
 	printf("> ");
 	fgets(choice, sizeof(choice), stdin);
 	if (choice[strlen(choice) - 1] == '\n') {
-		choice[strlen(choice) - 1] = '\0';
-	}
-	printf("You entered: %s\n", choice);
+        choice[strlen(choice) - 1] = '\0';
+    }
 
 	if (!strcmp(choice, "1")) {
 		ui_flash("tpm0");

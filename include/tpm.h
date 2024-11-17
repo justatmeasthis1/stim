@@ -1,0 +1,1 @@
+void tpm_write(char* index, char* bytes);
