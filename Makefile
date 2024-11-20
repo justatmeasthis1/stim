@@ -15,8 +15,8 @@ CFLAGS := \
 
 all: clean build kvs kvg
 
-kvs: build/bin/kvs
-kvg: build/bin/kvg
+kvs: build build/bin/kvs
+kvg: build build/bin/kvg
 
 build:
 	$(shell mkdir -p build/bin)
