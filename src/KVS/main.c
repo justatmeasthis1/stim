@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 	// example values for testing
 	const char* fwver = getFirmwareVersion();
 	char* kernver = "0x00010001";
-	char* tpmver = "2.0";
+	const char* tpmver = getTpmVersion();
 	char* fwmp = "0x1";
 	char* gscver = "0.5.229";
 	char* gsctype = "Cr50";

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdlib.h>
 
 #include "tpm.h"
 
@@ -38,5 +39,20 @@ const char* getFirmwareVersion(){
 
 // uint32_t getKernelVersion(){
 // }
+
+// this is kinda shitty, but until the TPM2 API is done, this is how we have to do it
+const char* getTpmVersion(){
+    char cmd[] = "tpmc tpmver";
+    static char output[5];
+
+    FILE* fp = popen(cmd, "r");
+    fgets(output, sizeof(output), fp);
+	fclose(fp);
+
+    trim_newline(output);
+
+    return output;
+}
+
 
 #endif
