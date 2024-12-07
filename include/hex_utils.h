@@ -1,5 +1,9 @@
+#ifndef HEX_UTILS_H
+#define HEX_UTILS_H
+
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 uint32_t convert_to_uint32(const char *str) {
     char *endptr;
@@ -26,3 +30,5 @@ void print_hex(const uint8_t *data, uint32_t size) {
         printf("%02x ", data[i]);
     }
 }
+
+#endif

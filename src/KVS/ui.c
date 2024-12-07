@@ -66,16 +66,16 @@ void ui_flash(char* flashtype) {
 
 	if (flashtype == "tpm0"){
 		if (!strcmp(structtype, "v0")) {
-			tpm_write("0x1008", kvgout_v0);
+			tpm_nvwrite("0x1008", kvgout_v0, "0", "platform", "");
 		} else if (!strcmp(structtype, "v1")) {
-			tpm_write("0x1008", kvgout_v1);
+			tpm_nvwrite("0x1008", kvgout_v1, "0", "platform", "");
 		}
 	} else if (flashtype == "rmasmoke"){
 		printf("using rmasmoke\n");
 	}
 }
 
-void ui_header(char* fwver, char* kernver, char* tpmver, char* fwmp, char* gscver, char* gsctype){
+void ui_header(const char* fwver, char* kernver, char* tpmver, char* fwmp, char* gscver, char* gsctype){
 	printf("KVS: Kernel Version Switcher (codename Maglev, bid: 2.0.0))\n");
 	printf("FW Version: %s\n", fwver);
 	printf("Kernel Version: %s\n", kernver);

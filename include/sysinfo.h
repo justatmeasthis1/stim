@@ -1,3 +1,11 @@
+#ifndef SYSINFO_H
+#define SYSINFO_H
+
+#include <stdint.h>
+#include <stddef.h>
+
+#include "tpm.h"
+
 void trim_newline(char* str) {
     size_t len = strlen(str);
     if (len > 0 && str[len - 1] == '\n') {
@@ -16,7 +24,7 @@ const char* getFirmwareVersion(){
     if (fptr == NULL) {
         printf("Error reading Firmware Version \n");
         printf("Please report as a bug at https://github.com/kxtzownsu/KVS-private\n");
-        
+
         sleep(86400); // sleep for 1d if error
         return "Error!"; 
     }
@@ -27,3 +35,8 @@ const char* getFirmwareVersion(){
 
     return firmwareVersion;
 }
+
+// uint32_t getKernelVersion(){
+// }
+
+#endif

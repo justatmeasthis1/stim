@@ -1,5 +1,11 @@
 // credit to Hannah / ZegLol for making this!
 
+#ifndef ARG_CHECKS_H
+#define ARG_CHECKS_H
+
+#include <stddef.h>
+
+
 int gargc;
 char **gargv;
 
@@ -30,3 +36,5 @@ char *fequals(const char *arg)
 
 	return "";
 }
+
+#endif
