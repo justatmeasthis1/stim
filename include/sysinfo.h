@@ -1,0 +1,29 @@
+void trim_newline(char* str) {
+    size_t len = strlen(str);
+    if (len > 0 && str[len - 1] == '\n') {
+        str[len - 1] = '\0';
+    }
+}
+
+
+const char* getFirmwareVersion(){
+    // note, may not work on all chromebooks
+    FILE *fptr;
+    char stupidfile[] = "/sys/class/dmi/id/bios_version";
+    fptr = fopen(stupidfile, "r");
+    static char firmwareVersion[1024];
+
+    if (fptr == NULL) {
+        printf("Error reading Firmware Version \n");
+        printf("Please report as a bug at https://github.com/kxtzownsu/KVS-private\n");
+        
+        sleep(86400); // sleep for 1d if error
+        return "Error!"; 
+    }
+    fgets(firmwareVersion, 100, fptr); 
+    fclose(fptr);
+
+    trim_newline(firmwareVersion);
+
+    return firmwareVersion;
+}

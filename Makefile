@@ -1,4 +1,4 @@
-CC ?= gcc
+CC := gcc
 SHELL ?= /bin/sh
 KVSFLIST := \
 	src/KVS/main.c \

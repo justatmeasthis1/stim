@@ -1,3 +1,6 @@
+#include <stdbool.h>
+#include <stdint.h>
+
 uint32_t convert_to_uint32(const char *str) {
     char *endptr;
     unsigned long ul_value = strtoul(str, &endptr, 0);

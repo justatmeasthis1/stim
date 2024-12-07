@@ -1,11 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "ui.h"
+#include "sysinfo.h"
 
 int main(int argc, char **argv) {
+	if (geteuid() !=  0){
+		printf("Please run KVS as root!\n");
+		exit(1);
+	}
+
 	// example values for testing
-	char* fwver = "Google_Grunt.11031.149.0";
+	const char* fwver = getFirmwareVersion();
 	char* kernver = "0x00010001";
 	char* tpmver = "2.0";
 	char* fwmp = "0x1";
