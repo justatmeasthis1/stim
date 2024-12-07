@@ -4,6 +4,7 @@ KVS: Kernel Version Switcher (anti-rollback rollbacker)
 [![build kvs](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml)
 [![build kvg](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml)
 
+<sub> my first real C project, the code may look like shit, dont get mad at me because of it! :3 </sub>
 
 
 ## Build Instructions
@@ -23,11 +24,24 @@ gdisk e2fsprogs
 sudo bash builder.sh <path to RAW shim> <optional flags>
 ```
 
-
 ## Booting a KVS shim
-After flashing KVS to a RAW shim, download & open the [Chrome Recovery Utility](https://chromewebstore.google.com/detail/chromebook-recovery-utili/pocpnlppkickgojjlmhdmidojbmbodfm?pli=1). <br />
-![image](https://kxtz.dev/reco-util.png)
+After installing KVS to a raw shim, download & open the [Chrome Recovery Utility](https://chromewebstore.google.com/detail/chromebook-recovery-utili/pocpnlppkickgojjlmhdmidojbmbodfm?pli=1). <br />
+![image](https://kxtz.dev/media/reco-util.png)
 <br />
 Press the Settings (⚙️) icon in the top right, and press "Use Local Image". Select your built KVS shim, and then select your target USB / SD.
 
-After it is done flashing, go to your target chromebook, press 
+After flashing the USB/SD, insert the newly-flashed USB/SD into your target device. Once inserted, press ESC + REFRESH (↻) + PWR (⏻) and then press CTRL+D and then enter.
+
+Once in Developer Mode, your screen should look similar to this:
+![image](https://kxtz.dev/media/dev-mode.png)
+
+Now, press ESC + REFRESH (↻) + PWR (⏻) again and it should load into KVS.
+
+## DISCLAIMER
+I am unable to provide any raw shim files directly. Raw shims are Google's property signed with their private keys. <br />
+Any legal trouble you recieve due to possessing a raw shim for KVS is not my responsibility. 
+
+## Credits
+kxtzownsu - writing KVS & KVG, porting to C <br />
+hannah - writing the tpm2 api in `src/KVS/tpm.c`, moral support, testing <br />
+people in TN - giving me the original kernver files before KVG existed <br />
