@@ -15,3 +15,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: build
       run: make kvs
+    - uses: actions/upload-artifact@v4
+    - name: upload build artifacts
+      with:
+        name: kvs-binary
+        path: build/kvs
