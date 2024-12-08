@@ -15,3 +15,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: build
       run: make kvg
+    - uses: actions/upload-artifact@v4
+    - name: upload build artifacts
+      with:
+        name: kvg-binary
+        path: build/kvg
