@@ -26,7 +26,7 @@ jobs:
     - name: install aarch64 rust toolchain
       run: rustup target add aarch64-unknown-linux-musl
     - name: install armv7 rust toolchain
-      run: rustup target add armv7-unknown-linux-musleabi
+      run: rustup target add armv7-unknown-linux-musleabihf
 
     # step 2: build project
     - name: build x86_64 bins
