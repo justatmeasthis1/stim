@@ -1,10 +1,10 @@
 # Building KVS: 
 ### Dependencies
-You only need gcc & make! All static libs are inside `lib/`
+You only need gcc, make, and musl-tools! All static libs are inside `lib/`
 
 ```
-Debian-based systems: sudo apt install gcc make
-Arch-based systems: sudo pacman -S gcc make
+Debian-based systems: sudo apt install gcc make musl-tools
+Arch-based systems: sudo pacman -S gcc make musl
 Alpine-based systems: apk add gcc make
 ```
 
@@ -19,8 +19,8 @@ git clone https://github.com/kxtzownsu/KVS
 cd KVS
 
 # Third, run two command to compile the KVS & KVG binary
-make kvs # final binary is at ./build/kvs
-make kvg # final binary is at ./build/kvg
+make kvs # final binary is at ./build/bin/kvs
+make kvg # final binary is at ./build/bin/kvg
 
 # (OPTIONAL) Fourth, run the shim builder
 sudo make shim-builder
@@ -35,11 +35,11 @@ Notes: KVS **requires** KVG or else the shim will not build successfully
 
 # Building KVG: 
 ### Dependencies
-Same as KVS, you only need `gcc` and `make`
+Same as KVS, you only need `gcc`, `make`, and `musl`
 
 ```
-Debian-based systems: sudo apt install gcc make
-Arch-based systems: sudo pacman -S gcc make
+Debian-based systems: sudo apt install gcc make musl-tools
+Arch-based systems: sudo pacman -S gcc make musl
 Alpine-based systems: apk add gcc make
 ```
 
@@ -50,5 +50,8 @@ git clone https://github.com/kxtzownsu/KVS # insiders, use KVS-private
 
 cd KVS
 
-make kvg # final binary will be at ./build/kvg
+make kvg # final binary will be at ./build/bin/kvg
 ```
+
+# Cross-compiling
+See [cross-compilation.md](cross-compilation.md).

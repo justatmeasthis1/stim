@@ -1,0 +1,18 @@
+[package]
+name = "kvg-kvs"
+version = "0.1.0"
+authors = ["Katelyn"]
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+
+[[bin]]
+name = "KVG"
+path = "src/KVG/main.rs"
+
+[[bin]]
+name = "KVS"
+path = "src/KVS/main.rs"

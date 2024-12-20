@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stdio.h": "c"
+    },
+
+    // this setting isn't "unknown", its just for troubleshooting,
+    // but it fixes the vscode.dev cursor on ChromeOS.
+    "editor.disableMonospaceOptimizations": true
+
+}
