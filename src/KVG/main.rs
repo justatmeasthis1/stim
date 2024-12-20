@@ -49,11 +49,11 @@ fn is_v0(context: &Vb2Context) -> bool {
 
 fn secdata_kernel_crc(context: &Vb2Context) -> u8 {
     if is_v0(context) {
-        let size = std::mem::size_of::<Vb2SecdataKernelV0>() - 1; // Exclude crc8
+        let size = std::mem::size_of::<Vb2SecdataKernelV0>() - 1;
         vb2_crc8(&context.secdata_kernel[0..size])
     } else {
         let struct_size = context.secdata_kernel[1] as usize;
-        let offset = 3; // Offset for flags in V1
+        let offset = 3;
         vb2_crc8(&context.secdata_kernel[offset..struct_size])
     }
 }
