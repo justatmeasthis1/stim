@@ -40,5 +40,5 @@ jobs:
     - name: Upload build files
       uses: actions/upload-artifact@v4
       with:
-        name: KV(S/G) binaries
+        name: upload binaries
         path: build/
