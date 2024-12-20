@@ -20,13 +20,13 @@ jobs:
 
     # step 1: install deps
     - name: install packages
-      run: sudo apt install gcc make musl-tools musl-dev gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+      run: sudo apt install -y gcc make musl-tools musl-dev gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
     - name: install x86_64 rust toolchain
       run: rustup target add x86_64-unknown-linux-musl
     - name: install aarch64 rust toolchain
       run: rustup target add aarch64-unknown-linux-musl
     - name: install armv7 rust toolchain
-      run: rustup target add armv7-unknown-linux-musl
+      run: rustup target add armv7-unknown-linux-musleabi
 
     # step 2: build project
     - name: build x86_64 bins
