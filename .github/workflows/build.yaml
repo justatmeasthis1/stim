@@ -1,0 +1,44 @@
+name: build all
+
+on:
+  push:
+    branches: [ "2.0" ]
+  pull_request:
+    branches: [ "2.0" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # step 0: bootstrap rustup
+    - name: init rustup
+      run: rustup default stable
+
+    # step 1: install deps
+    - name: install x86_64 rust toolchain
+      run: rustup target add x86_64-unknown-linux-musl
+    - name: install aarch64 rust toolchain
+      run: rustup target add aarch64-unknown-linux-musl
+    - name: install armv7 rust toolchain
+      run: rustup target add armv7-unknown-linux-musl
+    - name: install packages
+      run: sudo apt install gcc make musl-tools musl-dev gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+
+    # step 2: build project
+    - name: build x86_64 bins
+      run: make all
+    - name: build aarch64 bins
+      run: ARCH=aarch64 make all
+    - name: build armv7 bins
+      run: CC=arm-linux-gnueabihf-gcc ARCH=armv7 make all
+    
+    # step 3: upload
+    - name: Upload build files
+      uses: actions/upload-artifact@v4
+      with:
+        name: KV(S/G) binaries
+        path: build/

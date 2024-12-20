@@ -20,7 +20,7 @@ CC := aarch64-linux-gnu-gcc
 endif
 
 ifeq ($(ARCH), armv7)
-CC := armv7-linux-gnu-gcc
+CC ?= armv7-linux-gnu-gcc
 TOOLCHAIN := musleabihf
 endif
 
@@ -28,20 +28,20 @@ TARGET = ${ARCH}-unknown-linux-${TOOLCHAIN}
 
 all: clean build kvs kvg
 
-kvs: build build/bin/kvs
-kvg: build build/bin/kvg
+kvs: build build/bin/kvs-$(ARCH)
+kvg: build build/bin/kvg-$(ARCH)
 kvg-c: build build/bin/kvg-c
 
 build:
 	$(shell mkdir -p build/bin)
 
-build/bin/kvs: src/KVS/main.c
-	$(CC) $(KVSFLIST) -o build/bin/kvs $(CFLAGS)
-	chmod +rx build/bin/kvs
+build/bin/kvs-$(ARCH): src/KVS/main.c
+	$(CC) $(KVSFLIST) -o build/bin/kvs-$(ARCH) $(CFLAGS)
+	chmod +rx build/bin/kvs-$(ARCH)
 
-build/bin/kvg: src/KVG/main.rs
+build/bin/kvg-$(ARCH): src/KVG/main.rs
 	cargo build --bin KVG --target=$(TARGET) --release
-	cp target/$(TARGET)/release/KVG build/bin/kvg
+	cp target/$(TARGET)/release/KVG build/bin/kvg-$(ARCH)
 
 # The C version of KVS, not normally built.
 # Also guaranteed to be out-of-date.
