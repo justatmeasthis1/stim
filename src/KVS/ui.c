@@ -82,8 +82,7 @@ void ui_header(const char* fwver, char* kernver, const char* tpmver, const char*
 
 void show_credits(){
 	printf("kxtzownsu - Writing KVS 1 and 2\n");
-	printf("Hannah/ZegLol - Helping with /dev/tpm0 flashing, rewriting RMASmoke.\n");
-	printf("Writable - Writing the RMASmoke vulnerability\n");
+	printf("Hannah/ZegLol - writing is_ti50, mental support, testing\n");
 }
 
 void troll(){

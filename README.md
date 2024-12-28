@@ -44,4 +44,3 @@ Any legal trouble you recieve due to possessing a raw shim for KVS is not my res
 ## Credits
 kxtzownsu - writing KVS & KVG, porting to C <br />
 hannah - writing the `is_ti50` tool, moral support, testing <br />
-people in TN - giving me the original kernver files before KVG existed <br />
