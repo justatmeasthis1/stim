@@ -56,7 +56,7 @@ const char* getTpmVersion(){
 }
 
 const char* getKernver() {
-    char cmd[] = "tpmc read 0x1008 9 2>";
+    char cmd[] = "tpmc read 0x1008 9 2>/dev/null";
     static char output[26];
     FILE* fp = popen(cmd, "r");
     fgets(output, sizeof(output), fp);
@@ -95,18 +95,22 @@ const char* getFWMPFlags(){
     fclose(fp);
     trim_newline(output);
 
-
     if (strcmp(output, "") == 0) {
         return "N/A (Most likely unenrolled)";
-    } else {
-        uint8_t flags = 0;
-        static char flags_str[4];
-        unsigned int b1;
-        sscanf(output + 12, "%2x", &b1);
-        flags = b1;
-        snprintf(flags_str, sizeof(flags_str), "0x%08x (v1.0)", flags);
-        return flags_str;
     }
+
+    unsigned int fwmp = 0;
+    int num_parsed = sscanf(output + 12, "%2x", &fwmp);
+    static char fwmp_str[5];
+
+    if (num_parsed != 1) {
+        printf("Failed to parse FWMP value from output.\n");
+        return 0;
+    }
+
+    snprintf(fwmp_str, sizeof(fwmp_str), "0x%02x", fwmp);
+
+    return fwmp_str;
 }
 
 const char* getGSCRWVersion(){
@@ -121,7 +125,7 @@ const char* getGSCRWVersion(){
 }
 
 const char* getGSCType(){
-    char cmd[] = "/opt/kvs/bin/is_ti50";
+    char cmd[] = "/opt/kvs/bin/is_ti50 2>/dev/null";
     static char output[7];
     FILE* fp = popen(cmd, "r");
     fgets(output, sizeof(output), fp);
