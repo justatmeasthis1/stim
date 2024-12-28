@@ -4,6 +4,7 @@
 #define ARG_CHECKS_H
 
 #include <stddef.h>
+#include <string.h>
 
 
 int gargc;

@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "types.h": "c"
     },
 
     // this setting isn't "unknown", its just for troubleshooting,

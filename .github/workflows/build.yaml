@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: x86_64
-        path: build/
+        path: build/x86_64/
 
     - name: build aarch64 bins
       run: ARCH=aarch64 make all
@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: aarch64
-        path: build/
+        path: build/aarch64/
 
     - name: build armv7 bins
       run: CC=arm-linux-gnueabihf-gcc ARCH=armv7 make all
@@ -54,4 +54,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: armv7
-        path: build/
+        path: build/armv7/

@@ -8,6 +8,7 @@
 
 #include "tpm.h"
 #include "hex_utils.h"
+#include "kernver.h"
 
 void ui_flash(char* flashtype) {
 	// i feel like this is some of the dirtiest C that
@@ -19,7 +20,6 @@ void ui_flash(char* flashtype) {
 	char kvgout_v1[V1_SIZE + 1];
 
 	char kerninput[12];
-	char structtype[4];
 
 	printf("What kernver would you like to flash? \n");
 	printf("> ");
@@ -33,28 +33,21 @@ void ui_flash(char* flashtype) {
 		exit(1);
 	}
 
-	printf("Does your device have lightmode (v0) or darkmode (v1) recovery? Please type either v0 or v1.\n");
-	printf("> ");
-	fgets(structtype, sizeof(structtype), stdin);
-	if (structtype[strlen(structtype) - 1] == '\n') {
-        structtype[strlen(structtype) - 1] = '\0';
-    }
-
 	// the output of strcmp if it fails is True
-	if (strcmp(structtype, "v0") && strcmp(structtype, "v1")){
-		fprintf(stderr, "Invalid struct type %s, valid types are v0 and v1\n", structtype);
+	if (strcmp(KERNVER_TYPE, "v0") && strcmp(KERNVER_TYPE, "v1")){
+		fprintf(stderr, KERNVER_TYPE);
 		exit(1);
 	}
 
 	// we check if its *false* since strcmp returns true if failing
-	if (!strcmp(structtype, "v0")){ 
+	if (!strcmp(KERNVER_TYPE, "v0")){ 
 		char cmd[128];
 
 		snprintf(cmd, sizeof(cmd), "kvg %s --ver=0", kerninput);
     	FILE* fp = popen(cmd, "r");
     	fgets(kvgout_v0, sizeof(kvgout_v0), fp);
 		fclose(fp);
-	} else if (!strcmp(structtype, "v1")) {
+	} else if (!strcmp(KERNVER_TYPE, "v1")) {
 		char cmd[128];
 
 		snprintf(cmd, sizeof(cmd), "kvg %s --ver=1", kerninput);
@@ -65,17 +58,17 @@ void ui_flash(char* flashtype) {
 	
 
 	if (flashtype == "tpm0"){
-		if (!strcmp(structtype, "v0")) {
-			tpm_nvwrite("0x1008", kvgout_v0, "0", "platform", "");
-		} else if (!strcmp(structtype, "v1")) {
-			tpm_nvwrite("0x1008", kvgout_v1, "0", "platform", "");
+		if (!strcmp(KERNVER_TYPE, "v0")) {
+			tpm_nvwrite("0x1008", kvgout_v0);
+		} else if (!strcmp(KERNVER_TYPE, "v1")) {
+			tpm_nvwrite("0x1008", kvgout_v1);
 		}
 	} else if (flashtype == "rmasmoke"){
 		printf("using rmasmoke\n");
 	}
 }
 
-void ui_header(const char* fwver, char* kernver, const char* tpmver, char* fwmp, char* gscver, char* gsctype){
+void ui_header(const char* fwver, const char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype){
 	printf("KVS: Kernel Version Switcher (codename Maglev, bid: 2.0.0))\n");
 	printf("FW Version: %s\n", fwver);
 	printf("Kernel Version: %s\n", kernver);
@@ -86,8 +79,33 @@ void ui_header(const char* fwver, char* kernver, const char* tpmver, char* fwmp,
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 }
 
-void ui_credits(){
+void show_credits(){
 	printf("kxtzownsu - Writing KVS 1 and 2\n");
 	printf("Hannah/ZegLol - Helping with /dev/tpm0 flashing, rewriting RMASmoke.\n");
 	printf("Writable - Writing the RMASmoke vulnerability\n");
+}
+
+void troll(){
+	while (true){
+		printf("\033[H\033[J");
+    	printf(
+        	"         333333333333333   \n"
+        	"        3:::::::::::::::33 \n"
+        	"        3::::::33333::::::3\n"
+        	"        3333333     3:::::3\n"
+        	"                    3:::::3\n"
+        	" ::::::             3:::::3\n"
+        	" ::::::     33333333:::::3 \n"
+        	" ::::::     3:::::::::::3  \n"
+        	"            33333333:::::3 \n"
+        	"                    3:::::3\n"
+        	"                    3:::::3\n"
+        	" ::::::             3:::::3\n"
+        	" :::::: 3333333     3:::::3\n"
+        	" :::::: 3::::::33333::::::3\n"
+        	"        3:::::::::::::::33 \n"
+        	"         333333333333333   \n"
+    	);
+		sleep(1);
+	}
 }

@@ -2,6 +2,8 @@
 #define UI_H
 
 void ui_flash(char* flashtype);
-void ui_header(const char* fwver, char* kernver, const char* tpmver, char* fwmp, char* gscver, char* gsctype);
+void ui_header(const char* fwver, const char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype);
+void show_credits();
+void troll();
 
 #endif
