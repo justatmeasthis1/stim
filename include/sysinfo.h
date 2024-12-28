@@ -88,14 +88,12 @@ const char* getKernver() {
 }
 
 const char* getFWMPFlags(){
-    // char cmd[] = "tpmc read 0x100A 5 2>/dev/null";
-    // static char output[256];
-    // FILE* fp = popen(cmd, "r");
-    // fgets(output, sizeof(output), fp);
-    // fclose(fp);
-    // trim_newline(output);
+    char cmd[] = "tpmc read 0x100A 5 2>/dev/null";
     static char output[256];
-    output = ""'
+    FILE* fp = popen(cmd, "r");
+    fgets(output, sizeof(output), fp);
+    fclose(fp);
+    trim_newline(output);
 
 
     if (strcmp(output, "") == 0) {
