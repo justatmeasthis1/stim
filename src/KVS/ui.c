@@ -60,6 +60,7 @@ void ui_flash(char* flashtype) {
 	if (flashtype == "tpm0"){
 		if (!strcmp(KERNVER_TYPE, "v0")) {
 			tpm_nvwrite("0x1008", kvgout_v0);
+			
 		} else if (!strcmp(KERNVER_TYPE, "v1")) {
 			tpm_nvwrite("0x1008", kvgout_v1);
 		}
@@ -68,7 +69,7 @@ void ui_flash(char* flashtype) {
 	}
 }
 
-void ui_header(const char* fwver, const char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype){
+void ui_header(const char* fwver, char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype){
 	printf("KVS: Kernel Version Switcher (codename Maglev, bid: 2.0.0))\n");
 	printf("FW Version: %s\n", fwver);
 	printf("Kernel Version: %s\n", kernver);
@@ -108,4 +109,9 @@ void troll(){
     	);
 		sleep(1);
 	}
+}
+
+void enterToContinue() {
+    printf("\nPress ENTER to return to the main menu\n");
+    getchar();
 }

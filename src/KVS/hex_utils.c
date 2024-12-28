@@ -27,6 +27,9 @@ void print_hex(const uint8_t *data, uint32_t size) {
     printf("\n");
 }
 
-bool grep(char *string, const char *pattern) {
-    return strstr(string, pattern) != NULL;
+void trim_newline(char* str) {
+    size_t len = strlen(str);
+    if (len > 0 && str[len - 1] == '\n') {
+        str[len - 1] = '\0';
+    }
 }

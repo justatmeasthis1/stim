@@ -11,13 +11,6 @@
 
 const char *KERNVER_TYPE = "N/A. This is an error, please report at https://github.com/kxtzownsu/KVS with a picture of the screen.";
 
-void trim_newline(char* str) {
-    size_t len = strlen(str);
-    if (len > 0 && str[len - 1] == '\n') {
-        str[len - 1] = '\0';
-    }
-}
-
 
 const char* getFirmwareVersion(){
     // note, may not work on all chromebooks
@@ -28,15 +21,14 @@ const char* getFirmwareVersion(){
     static char firmwareVersion[1024];
 
     if (fptr == NULL) {
-        printf("Error reading Firmware Version \n");
-        printf("Please report as a bug at https://github.com/kxtzownsu/KVS-private\n");
+        printf("Error reading Firmware Version\n");
+        printf("Please report as a bug at https://github.com/kxtzownsu/KVS\n");
 
         sleep(86400);
         return "Error!"; 
     }
     fgets(firmwareVersion, 100, fptr); 
     fclose(fptr);
-
     trim_newline(firmwareVersion);
 
     return firmwareVersion;
@@ -45,17 +37,15 @@ const char* getFirmwareVersion(){
 const char* getTpmVersion(){
     char cmd[] = "tpmc tpmver";
     static char output[5];
-
     FILE* fp = popen(cmd, "r");
     fgets(output, sizeof(output), fp);
 	fclose(fp);
-
     trim_newline(output);
 
     return output;
 }
 
-const char* getKernver() {
+char* getKernver() {
     char cmd[] = "tpmc read 0x1008 9 2>/dev/null";
     static char output[26];
     FILE* fp = popen(cmd, "r");
@@ -82,7 +72,6 @@ const char* getKernver() {
         snprintf(kernver_str, sizeof(kernver_str), "0x%08x (v0.2)", kernver);
         KERNVER_TYPE = "v0";
     }
-
 
     return kernver_str;
 }

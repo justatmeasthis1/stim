@@ -26,19 +26,21 @@ int main(int argc, char **argv) {
 
 	// example values for testing
 	const char* fwver = getFirmwareVersion();
-	const char* kernver = getKernver();
 	const char* tpmver = getTpmVersion();
 	const char* fwmp = getFWMPFlags();
 	const char* gscver = getGSCRWVersion();
 	const char* gsctype = getGSCType();
-	const char* requirement_flash = "[UNENROLLED]";
 	
 
 	// only allow 2 characters (option & newline)
 	char choice[3];
 	while (true) {
+		char* kernver = getKernver();
+		
+		printf("\033[H\033[J"); // clears the screen
+
 		ui_header(fwver, kernver, tpmver, fwmp, gscver, gsctype);
-		printf("%s 1) Flash new kernver \n", requirement_flash);
+		printf("1) Flash new kernver \n");
 		printf("2) Run KAUB (Kernver Automatic Update Blocker) \n");
 		printf("3) Kernver FAQ \n");
 		printf("4) Credits\n");
@@ -52,14 +54,19 @@ int main(int argc, char **argv) {
 
 		if (!strcmp(choice, "1")) {
 			ui_flash("tpm0");
+			enterToContinue();
 		} else if (!strcmp(choice, "2")) {
-			printf("KAUB is not avaliable on v2.0.0. Please either update your shim or wait for KAUB to release on v2.1");
+			printf("KAUB is not avaliable on v2.0.0. Please either update your shim or wait for KAUB to release on v2.1\n");
+			enterToContinue();
 		} else if (!strcmp(choice, "3")) {
 			kernver_faq();
+			enterToContinue();
 		} else if (!strcmp(choice, "4")) {
 			show_credits();
-		} else if (!strcmp(choice, "4")) {
+			enterToContinue();
+		} else if (!strcmp(choice, "5")) {
 			system("/bin/bash");
+			enterToContinue();
 		} else if (!strcmp(choice, "6")) {
 			exit(1);
 		} else if (!strcmp(choice, "7")) {
