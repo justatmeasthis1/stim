@@ -71,6 +71,10 @@ int main(int argc, char **argv) {
 			exit(1);
 		} else if (!strcmp(choice, "7")) {
 			troll();
+		} else {
+			printf("You have entered an invalid option... how?? Next time, only input the number.\n");
+			printf("Example: > 1\n");
+			enterToContinue();
 		}
 	}
 
