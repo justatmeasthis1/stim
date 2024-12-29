@@ -10,7 +10,13 @@ KVSFLIST := \
 	src/KVS/hex_utils.c
 
 TOOLS := \
+	is_ti50
+
+TOOL_SRC := \
 	src/tools/is_ti50.c
+
+TOOL_OBJS := $(patsubst src/tools/%.c,build/$(ARCH)/tools/%.o,$(TOOL_SRC))
+TOOL_BINS := $(patsubst %,build/$(ARCH)/tools/%,$(TOOLS))
 
 CFLAGS := \
 	-Iinclude \
@@ -30,15 +36,24 @@ endif
 
 TARGET = ${ARCH}-unknown-linux-${TOOLCHAIN}
 
-all: clean build kvs kvg
+all: clean build kvs kvg tools
 
 kvs: build build/$(ARCH)/bin/kvs
 kvg: build build/$(ARCH)/bin/kvg
-tools: build build/bin
-kvg-c: build build/$(ARCH)bin/kvg-c
+
+tools: build $(TOOL_BINS)
+
+build/$(ARCH)/tools/%: build/$(ARCH)/tools/%.o
+	$(CC) $(LDFLAGS) -static -o $@ $<
+	mv $@ build/$(ARCH)/bin/
+	rm -rf build/$(ARCH)/tools
+
+build/$(ARCH)/tools/%.o: src/tools/%.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 build:
-	$(shell mkdir -p build/$(ARCH)/bin)
+	mkdir -p build/$(ARCH)/bin
+	mkdir -p build/$(ARCH)/tools
 
 build/$(ARCH)/bin/kvs: src/KVS/main.c
 	$(CC) $(KVSFLIST) -o build/$(ARCH)/bin/kvs $(CFLAGS)

@@ -18,32 +18,32 @@ COLOR_CYAN_B="\033[1;36m"
 readlink /proc/$$/exe | grep -q bash || error "You MUST execute this with Bash!"
 
 safesync(){
-  sync
-  sleep 0.2
+	sync
+	sleep 0.2
 }
 
 log() {
-  printf "%b\n" "${COLOR_BLUE_B}Info: $*${COLOR_RESET}"
+	printf "%b\n" "${COLOR_BLUE_B}Info: $*${COLOR_RESET}"
 }
 
 
 cleanup(){
-  suppress umount "$ROOT_MNT"
-  rm -rf "$ROOT_MNT"
-  
-  suppress umount "$STATE_MNT"
-  rm -rf "$STATE_MNT"
-  
-  suppress umount -R "$LOOPDEV"*
-  
-  losetup -d "$LOOPDEV"
-  losetup -D #in case of cmd above failing
+	suppress umount "$ROOT_MNT"
+	rm -rf "$ROOT_MNT"
+	
+	suppress umount "$STATE_MNT"
+	rm -rf "$STATE_MNT"
+	
+	suppress umount -R "$LOOPDEV"*
+	
+	losetup -d "$LOOPDEV"
+	losetup -D #in case of cmd above failing
 }
 
 error(){
-  printf "${COLOR_RED_B}ERR: %b${COLOR_RESET}\n" "$*" >&2 || :
-  printf "${COLOR_RED}Exiting... ${COLOR_RESET}\n" >&2 || :
-  exit 1
+	printf "${COLOR_RED_B}ERR: %b${COLOR_RESET}\n" "$*" >&2 || :
+	printf "${COLOR_RED}Exiting... ${COLOR_RESET}\n" >&2 || :
+	exit 1
 }
 
 suppress() {
@@ -107,29 +107,29 @@ disable_rw_mount() {
 }
 
 shrink_partitions() {
-  local shim="$1"
-  fdisk "$shim" <<EOF
-  d
-  12
-  d
-  11
-  d
-  10
-  d
-  9
-  d
-  8
-  d
-  7
-  d
-  6
-  d
-  5
-  d
-  4
-  d
-  1
-  w
+	local shim="$1"
+	fdisk "$shim" <<EOF
+d
+12
+d
+11
+d
+10
+d
+9
+d
+8
+d
+7
+d
+6
+d
+5
+d
+4
+d
+1
+w
 EOF
 }
 
@@ -152,28 +152,28 @@ format_bytes() {
 
 
 create_stateful(){
-  log "Creating KVS/Stateful Partition"
-  local final_sector=$(get_final_sector "$LOOPDEV")
-  local sector_size=$(get_sector_size "$LOOPDEV")
-  # special UUID is from grunt shim, dunno if this is different on other shims
-  "$CGPT" add "$LOOPDEV" -i 1 -b $((final_sector + 1)) -s $((STATE_SIZE / sector_size)) -t "9CC433E4-52DB-1F45-A951-316373C30605"
-  partx -u -n 1 "$LOOPDEV"
-  suppress mkfs.ext4 -F -L KVS "$LOOPDEV"p1
-  safesync
+	log "Creating KVS/Stateful Partition"
+	local final_sector=$(get_final_sector "$LOOPDEV")
+	local sector_size=$(get_sector_size "$LOOPDEV")
+	"$CGPT" add "$LOOPDEV" -i 1 -b $((final_sector + 1)) -s $((STATE_SIZE / sector_size)) -t data
+	partx -u -n 1 "$LOOPDEV"
+	suppress mkfs.ext4 -F -L KVS "$LOOPDEV"p1
+	safesync
 }
 
 inject_stateful(){
-  log "Injecting KVS/Stateful Partition"
-  
-  echo "Mounting stateful.."
-  mount "$LOOPDEV"p1 "$STATE_MNT"
-  echo "Copying files.."
-  cp -r $SCRIPT_DIR/stateful/* "$STATE_MNT"
-  umount "$STATE_MNT"
+	log "Injecting KVS/Stateful Partition"
+	
+	echo "Mounting stateful.."
+	mount "$LOOPDEV"p1 "$STATE_MNT"
+	echo "Copying files.."
+	mkdir -p "${STATE_MNT}/dev_image/etc"
+	touch "${STATE_MNT}/dev_image/etc/lsb-factory"
+	umount "$STATE_MNT"
 }
 
 shrink_root() {
-  log "Shrinking ROOT-A Partition"
+	log "Shrinking ROOT-A Partition"
 
 	enable_rw_mount "${LOOPDEV}p3"
 	suppress e2fsck -fy "${LOOPDEV}p3"
@@ -195,16 +195,44 @@ shrink_root() {
 	partx -u -n 3 "$LOOPDEV"
 }
 
+detect_arch() {
+	MNT_ROOT=$(mktemp -d)
+	mount -o ro "${LOOPDEV}p3" "$MNT_ROOT"
+
+	TARGET_ARCH=x86_64
+	if [ -f "$MNT_ROOT/bin/bash" ]; then
+		case "$(file -b "$MNT_ROOT/bin/bash" | awk -F ', ' '{print $2}' | tr '[:upper:]' '[:lower:]')" in
+			# for now assume arm has aarch64 kernel
+			# this only assumes since theres no armv7 (arm32) shims leaked
+			*aarch64* | *armv8* | *arm*) TARGET_ARCH=aarch64 ;;
+		esac
+	fi
+	echo "Detected architecture: $TARGET_ARCH"
+
+	umount "$MNT_ROOT"
+	rmdir "$MNT_ROOT"
+}
+
 inject_root(){
-  log "Injecting ROOT-A Partition"
-  
-  echo "Mounting root.."
-  suppress enable_rw_mount "$LOOPDEV"p3
-  suppress mount "$LOOPDEV"p3 "$ROOT_MNT"
-  echo "Copying files.."
-  suppress cp -r "$SCRIPT_DIR"/root/* "$ROOT_MNT"
-  echo "$(date +'%m-%d-%Y %I:%M%p %Z')" > "$ROOT_MNT"/DATE_COMPILED
-  suppress umount "$ROOT_MNT"
+	log "Injecting ROOT-A Partition"
+	detect_arch
+
+	echo "Mounting root.."
+	suppress enable_rw_mount "$LOOPDEV"p3
+	suppress mount "$LOOPDEV"p3 "$ROOT_MNT"
+	echo "Copying files.."
+	cp -r "$SCRIPT_DIR/../build/$TARGET_ARCH/." "$ROOT_MNT"
+	suppress cp -r "$SCRIPT_DIR/root/factory_install.sh" "$ROOT_MNT/usr/sbin/factory_install.sh"
+	mkdir -p "$ROOT_MNT"/opt/kvs/bin
+	mv "$ROOT_MNT"/bin/is_ti50 "$ROOT_MNT"/opt/kvs/bin/is_ti50
+	echo 'export PATH=$PATH:/opt/kvs/bin' >> "$ROOT_MNT"/root/.bashrc
+
+	echo "Removing tcsd & trunksd.."
+	rm -rf "$ROOT_MNT"/etc/init/tcsd.conf
+	rm -rf "$ROOT_MNT"/etc/init/trunksd.conf
+
+	echo "$(date +'%m-%d-%Y %I:%M%p %Z')" > "$ROOT_MNT"/DATE_COMPILED
+	suppress umount "$ROOT_MNT"
 }
 
 get_parts_physical_order() {
@@ -225,5 +253,5 @@ squash_partitions() {
 }
 
 umount_all(){
-  suppress umount -R "$LOOPDEV"*
+	suppress umount -R "$LOOPDEV"*
 }

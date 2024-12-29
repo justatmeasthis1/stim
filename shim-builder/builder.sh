@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR=$(dirname "$0")
-VERSION=1
+VERSION=2.0.0
 
 HOST_ARCH=$(lscpu | grep Architecture | awk '{print $2}')
 if [ $HOST_ARCH == "x86_64" ]; then
-  CGPT="$SCRIPT_DIR/bins/cgpt.x86-64"
-  SFDISK="$SCRIPT_DIR/bins/sfdisk.x86-64"
+	CGPT="$SCRIPT_DIR/bins/cgpt.x86-64"
+	SFDISK="$SCRIPT_DIR/bins/sfdisk.x86-64"
 else
-  echo "Building on an ARM system is not supported currently"
-  exit
-  # CGPT="$SCRIPT_DIR/bins/cgpt.aarch64"
-  # SFDISK="$SCRIPT_DIR/bins/sfdisk.aarch64"
+	echo "Building on an ARM system is not supported currently"
+	exit
+	# CGPT="$SCRIPT_DIR/bins/cgpt.aarch64"
+	# SFDISK="$SCRIPT_DIR/bins/sfdisk.aarch64"
 fi
 
 source $SCRIPT_DIR/functions.sh
@@ -68,13 +68,13 @@ safesync
 
 log "Checking for anti-skid lock..."
 if [ "$2" == "--antiskid" ]; then
-  echo "Skid lock found!"
-  echo "Disabling RW mount.."
-  disable_rw_mount "${LOOPDEV}p3"
+	echo "Skid lock found!"
+	echo "Disabling RW mount.."
+	disable_rw_mount "${LOOPDEV}p3"
 else
-  echo "Skid lock disabled.."
-  echo "Enabling RW Mount.."
-  enable_rw_mount "${LOOPDEV}p3"
+	echo "Skid lock disabled.."
+	echo "Enabling RW Mount.."
+	enable_rw_mount "${LOOPDEV}p3"
 fi
 
 cleanup
