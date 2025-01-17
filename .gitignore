@@ -2,6 +2,7 @@
 build/
 target/
 Cargo.lock
+*.bin*
 
 # Prerequisites
 *.d

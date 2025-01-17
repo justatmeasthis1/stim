@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	// example values for testing
 	const char* fwver = getFirmwareVersion();
 	const char* tpmver = getTpmVersion();
 	const char* fwmp = getFWMPFlags();

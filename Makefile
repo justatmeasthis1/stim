@@ -41,6 +41,8 @@ all: clean build kvs kvg tools
 kvs: build build/$(ARCH)/bin/kvs
 kvg: build build/$(ARCH)/bin/kvg
 
+.PHONY: build
+
 tools: build $(TOOL_BINS)
 
 build/$(ARCH)/tools/%: build/$(ARCH)/tools/%.o
@@ -67,6 +69,10 @@ build/$(ARCH)/bin/kvg: src/KVG/main.rs
 install:
 	cp -r build/* /usr/local/
 
-clean:
-	rm -rf build
-	rm -rf target
+ clean:
+    rm -rf build/$(ARCH)
+    rm -rf target/$(TARGET)
+
+deepclean:
+        rm -rf build
+        rm -rf target
