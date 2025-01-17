@@ -1,12 +1,12 @@
 # kvs
 KVS: Kernel Version Switcher (anti-rollback rollbacker)
 <br>
-[![build kvs](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvs.yaml)
-[![build kvg](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/kvg.yaml)
+[![build all](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml)
 
-<sub> my first real C project, the code may look like shit, dont get mad at me because of it! </sub>
+<sub> my first real C project, the code may look like shit, dont get mad at me because of it! :3 </sub>
 
-> [!IMPORTANT]
+
+> [!IMPORTANT]  
 > This requires an unenrolled device. Any errors relating to being enrolled will be ignored and closed.
 
 ## Build Instructions
