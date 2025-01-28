@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "ui.h"
 #include "sysinfo.h"
+#include "arg_checks.h"
 
 void kernver_faq(){
 	printf(
@@ -18,10 +19,19 @@ void kernver_faq(){
 	);
 };
 
+void dbgprintf(char* text){
+	if (fbool("--debug","-d")){
+		printf("DEBUG: %s\n", text);
+	}
+}
+
 int main(int argc, char **argv) {
+	gargc = argc;
+	gargv = argv;
 	if (geteuid() !=  0){
 		printf("Please run KVS as root!\n");
-		exit(1);
+		printf("This is a bug, please report it at https://github.com/kxtzownsu/KVS");
+		sleep(86400);
 	}
 
 	const char* fwver = getFirmwareVersion();
@@ -33,6 +43,7 @@ int main(int argc, char **argv) {
 
 	// only allow 2 characters (option & newline)
 	char choice[3];
+	dbgprintf("ui loop \n");
 	while (true) {
 		char* kernver = getKernver();
 		

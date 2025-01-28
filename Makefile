@@ -5,7 +5,6 @@ SHELL ?= /bin/sh
 KVSFLIST := \
 	src/KVS/main.c \
 	src/KVS/tpm.c \
-	src/KVS/rmasmoke.c \
 	src/KVS/ui.c \
 	src/KVS/hex_utils.c
 
@@ -21,7 +20,6 @@ TOOL_BINS := $(patsubst %,build/$(ARCH)/tools/%,$(TOOLS))
 CFLAGS := \
 	-Iinclude \
 	-g \
-	-O3 \
 	-Llib \
 	-static
 
@@ -69,10 +67,10 @@ build/$(ARCH)/bin/kvg: src/KVG/main.rs
 install:
 	cp -r build/* /usr/local/
 
- clean:
-    rm -rf build/$(ARCH)
-    rm -rf target/$(TARGET)
+clean:
+	rm -rf build/$(ARCH)
+	rm -rf target/$(TARGET)
 
 deepclean:
-        rm -rf build
-        rm -rf target
+	rm -rf build
+	rm -rf target

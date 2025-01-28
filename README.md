@@ -3,7 +3,7 @@ KVS: Kernel Version Switcher (anti-rollback rollbacker)
 <br>
 [![build all](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml)
 
-<sub> my first real C project, the code may look like shit, dont get mad at me because of it! :3 </sub>
+<sub> my first real C project, the code may look like shit, dont get mad at me because of it! </sub>
 
 
 > [!IMPORTANT]  
@@ -46,3 +46,4 @@ Any legal trouble you recieve due to possessing a raw shim for KVS is not my res
 ## Credits
 kxtzownsu - writing KVS & KVG, porting to C <br />
 hannah - writing the `is_ti50` tool, moral support, testing <br />
+Darkn - testing

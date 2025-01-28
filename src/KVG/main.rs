@@ -100,7 +100,7 @@ fn main() {
             e.g.: {} 0x00010001 --raw\n\
             --raw - prints the output as raw hex bytes\n\
             --ver=<0/1> - specifies the kernver struct version to use\n\
-            --help - shows this message :3\n\
+            --help - shows this message\n\
             KVG was created by kxtzownsu\n\
             (now written in Rust)",
             args[0], args[0]

@@ -15,20 +15,28 @@ const char *KERNVER_TYPE = "N/A. This is an error, please report at https://gith
 const char* getFirmwareVersion(){
     // note, may not work on all chromebooks
     // I also don't wanna have to rely on the crossystem binary for it
-    FILE *fptr;
-    char stupidfile[] = "/sys/class/dmi/id/bios_version";
-    fptr = fopen(stupidfile, "r");
+
+    // i hate ChromeOS
+    FILE *fp;
+    #ifdef __x86_64__
+        char stupidfile[] = "/sys/class/platform/chromeos_acpi/FWID";
+    #elif defined(__aarch64__)
+        char stupidfile[] = "/proc/device-tree/firmware/chromeos/firmware-version";
+    #elif defined(__arm__)
+        char stupidfile[] = "/proc/device-tree/firmware/chromeos/firmware-version";
+    #endif
+    fp = fopen(stupidfile, "r");
     static char firmwareVersion[1024];
 
-    if (fptr == NULL) {
+    if (fp == NULL) {
         printf("Error reading Firmware Version\n");
         printf("Please report as a bug at https://github.com/kxtzownsu/KVS\n");
 
         sleep(86400);
         return "Error!"; 
     }
-    fgets(firmwareVersion, 100, fptr); 
-    fclose(fptr);
+    fgets(firmwareVersion, 100, fp);
+    fclose(fp);
     trim_newline(firmwareVersion);
 
     return firmwareVersion;
@@ -49,7 +57,13 @@ char* getKernver() {
     char cmd[] = "tpmc read 0x1008 9 2>/dev/null";
     static char output[26];
     FILE* fp = popen(cmd, "r");
-    fgets(output, sizeof(output), fp);
+    if (fgets(output, sizeof(output), fp) == NULL) {
+        printf("Error reading kernver\n");
+        printf("Please report as a bug at https://github.com/kxtzownsu/KVS\n");
+
+        sleep(86400);
+        return "Error!";
+    }
 	fclose(fp);
     trim_newline(output);
     
@@ -57,6 +71,7 @@ char* getKernver() {
     static char kernver_str[18] = "0x00000000";
 
     // ewwww yucky i hate this
+    // bitshift stuff sucks so bad when looking at it
 
     if (strncmp(output, "10", 2) == 0) {
         printf("using v1.0\n");
@@ -73,6 +88,7 @@ char* getKernver() {
         KERNVER_TYPE = "v0";
     }
 
+    KERNVER_TYPE = "v0";
     return kernver_str;
 }
 
@@ -93,12 +109,10 @@ const char* getFWMPFlags(){
     static char fwmp_str[5];
 
     if (num_parsed != 1) {
-        printf("Failed to parse FWMP value from output.\n");
-        return 0;
+        return "Failed to parse FWMP value from output.";
     }
 
     snprintf(fwmp_str, sizeof(fwmp_str), "0x%02x", fwmp);
-
     return fwmp_str;
 }
 
@@ -106,18 +120,33 @@ const char* getGSCRWVersion(){
     char cmd[] = "gsctool -a -f | tail -n 1 | awk '{printf $2}'";
     static char output[8];
     FILE* fp = popen(cmd, "r");
-    fgets(output, sizeof(output), fp);
+    if (fgets(output, sizeof(output), fp) == NULL) {
+        printf("Error reading GSC(cr50/ti50) version\n");
+        printf("Please report as a bug at https://github.com/kxtzownsu/KVS\n");
+
+        sleep(86400);
+        return "Error!";
+    }
 	fclose(fp);
     trim_newline(output);
 
     return output;
 }
 
+// this being at a pre-made directory instead of
+// being in PATH or /bin is probably bad, but
+// I don't really care that much
 const char* getGSCType(){
     char cmd[] = "/opt/kvs/bin/is_ti50 2>/dev/null";
     static char output[7];
     FILE* fp = popen(cmd, "r");
-    fgets(output, sizeof(output), fp);
+    if (fgets(output, sizeof(output), fp) == NULL) {
+        printf("Error getting GSC(cr50/ti50) type!\n");
+        printf("Please report as a bug at https://github.com/kxtzownsu/KVS\n");
+
+        sleep(86400);
+        return "Error!";
+    }
 	fclose(fp);
     trim_newline(output);
 

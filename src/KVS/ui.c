@@ -24,48 +24,43 @@ void ui_flash(char* flashtype) {
 	printf("What kernver would you like to flash? \n");
 	printf("> ");
 	fgets(kerninput, sizeof(kerninput), stdin);
-	// nya
 	if (kerninput[strlen(kerninput) - 1] == '\n') {
         kerninput[strlen(kerninput) - 1] = '\0';
     }
 	if (!is_valid_hex(kerninput)){
-		fprintf(stderr, "Your kernver, %s, was an invalid input. Not hex.", kerninput);
+		fprintf(stderr, "Your kernver, %s, was an invalid input, not hex. A valid input would be: 0x00010001", kerninput);
 		exit(1);
-	}
+	} else {
+		// the output of strcmp if it fails is True
+		if (strcmp(KERNVER_TYPE, "v0") && strcmp(KERNVER_TYPE, "v1")){
+			// the reason we're not redirecting the user to the issues page is because if KERNVER_TYPE 
+			// isn't detected as v0 or v1 in sysinfo.h, it'll do that already
+			fprintf(stderr, "%s", KERNVER_TYPE);
+			sleep(86400);
+		}
 
-	// the output of strcmp if it fails is True
-	if (strcmp(KERNVER_TYPE, "v0") && strcmp(KERNVER_TYPE, "v1")){
-		fprintf(stderr, KERNVER_TYPE);
-		exit(1);
-	}
+		// we check if its *false* since strcmp returns true if failing
+		if (!strcmp(KERNVER_TYPE, "v0")){ 
+			char cmd[128];
 
-	// we check if its *false* since strcmp returns true if failing
-	if (!strcmp(KERNVER_TYPE, "v0")){ 
-		char cmd[128];
+			snprintf(cmd, sizeof(cmd), "kvg %s --ver=0", kerninput);
+    		FILE* fp = popen(cmd, "r");
+    		fgets(kvgout_v0, sizeof(kvgout_v0), fp);
+			fclose(fp);
+		} else if (!strcmp(KERNVER_TYPE, "v1")) {
+			char cmd[128];
 
-		snprintf(cmd, sizeof(cmd), "kvg %s --ver=0", kerninput);
-    	FILE* fp = popen(cmd, "r");
-    	fgets(kvgout_v0, sizeof(kvgout_v0), fp);
-		fclose(fp);
-	} else if (!strcmp(KERNVER_TYPE, "v1")) {
-		char cmd[128];
-
-		snprintf(cmd, sizeof(cmd), "kvg %s --ver=1", kerninput);
-    	FILE* fp = popen(cmd, "r");
-    	fgets(kvgout_v1, sizeof(kvgout_v1), fp);
-		fclose(fp);
-	}
+			snprintf(cmd, sizeof(cmd), "kvg %s --ver=1", kerninput);
+    		FILE* fp = popen(cmd, "r");
+    		fgets(kvgout_v1, sizeof(kvgout_v1), fp);
+			fclose(fp);
+		}
 	
-
-	if (flashtype == "tpm0"){
 		if (!strcmp(KERNVER_TYPE, "v0")) {
 			tpm_nvwrite("0x1008", kvgout_v0);
-
 		} else if (!strcmp(KERNVER_TYPE, "v1")) {
 			tpm_nvwrite("0x1008", kvgout_v1);
 		}
-	} else if (flashtype == "rmasmoke"){
-		printf("using rmasmoke\n");
 	}
 }
 
@@ -83,6 +78,7 @@ void ui_header(const char* fwver, char* kernver, const char* tpmver, const char*
 void show_credits(){
 	printf("kxtzownsu - Writing KVS 1 and 2\n");
 	printf("Hannah/ZegLol - writing is_ti50, mental support, testing\n");
+	printf("Darkn - testing\n");
 }
 
 void troll(){
