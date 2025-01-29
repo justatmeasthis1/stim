@@ -12,7 +12,7 @@ USAGE: ./kvg <kernver> <optional flags>
 e.g.: ./kvg 0x00010001 --raw --ver=0
 --raw - prints the output as raw hex bytes
 --ver=<0/1> - specifies the kernver struct version to use
---help - shows this message :3
+--help - shows this message
 KVG was created by kxtzownsu
 (now written in Rust)
 $
@@ -31,13 +31,7 @@ NOT like this:
 Passing `--raw` will give you the raw hex output, instead of it printing like this `02 4c` it would print `\x2\x4c`.
 
 # Using KVS (Kernel Version Switcher)
-One thing to note, if you aren't using cr50-hammer or RMASmoke, then you must be **UNENROLLED**!
-
-If you *are* using RMASmoke, make sure you're on Cr50 RW Version 0.5.229 or lower.
-
-If you *are* using cr50-hammer, make sure <fill in later when cr50-hammer patch>.
-
-If you *aren't* using RMASmoke or cr50-hammer, make sure to use the `tpm0 flash` method!
+you MUST be unenrolled!! 
 
 ## Examples:
 ***Flashing via tpm0 flash***
@@ -50,18 +44,14 @@ FWMP: 0x1
 GSC RW Version: 0.5.229
 GSC Type: Cr50
 -=-=-=-=-=-=-=-=-=-=-=-=-
-1) Flash new kernver via /dev/tpm0 (REQ. UNENROLLED)
-2) Flash new kernver via RMASmoke (REQ. CR50 VER 0.5.229 OR LOWER)
-3) Make kernver index unwritable
-4) Shell
-5) Reboot
+1) Flash new kernver
+2) Run KAUB
+3) Kernver FAQ
+4) Credits
+5) Shell
+6) Reboot
 > 1
 What kernver would you like to flash?
 > 0x00010001
-Does your device have lightmode (v0) or darkmode (v1) recovery? Please type either v0 or v1.
-> v0
-writing 13 bytes...
-Finished! Press ENTER to return to main menu
+Press ENTER to return to main menu
 ```
-
-<finish docs when RMASmoke & cr50-hammer release>
