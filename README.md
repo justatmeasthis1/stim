@@ -1,7 +1,7 @@
 # kvs
 KVS: Kernel Version Switcher (anti-rollback rollbacker)
 <br>
-[![build all](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml/badge.svg)](https://github.com/kxtzownsu/KVS-private/actions/workflows/build.yaml)
+[![build all](https://github.com/kxtzownsu/KVS/actions/workflows/build.yaml/badge.svg)](https://github.com/kxtzownsu/KVS/actions/workflows/build.yaml)
 
 <sub> my first real C project, the code may look like shit, dont get mad at me because of it! </sub>
 
