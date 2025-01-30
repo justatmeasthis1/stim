@@ -64,10 +64,9 @@ void ui_flash(char* flashtype) {
 	}
 }
 
-void ui_header(const char* fwver, char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype){
+void ui_header(char* kernver, const char* tpmver, const char* fwmp, const char* gscver, const char* gsctype){
 	printf("KVS: Kernel Version Switcher (codename Maglev, bid: 2.0.0)\n");
-	printf("FW Version: %s\n", fwver);
-	printf("Kernel Version: %s\n", kernver);
+	printf("Kernver: %s\n", kernver);
 	printf("TPM: %s\n", tpmver);
 	printf("FWMP: %s\n", fwmp);
 	printf("GSC RW Version: %s\n", gscver);

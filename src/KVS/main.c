@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 		sleep(86400);
 	}
 
-	const char* fwver = getFirmwareVersion();
+	// const char* fwver = getFirmwareVersion();
 	const char* tpmver = getTpmVersion();
 	const char* fwmp = getFWMPFlags();
 	const char* gscver = getGSCRWVersion();
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 		
 		printf("\033[H\033[J"); // clears the screen
 
-		ui_header(fwver, kernver, tpmver, fwmp, gscver, gsctype);
+		ui_header(kernver, tpmver, fwmp, gscver, gsctype);
 		printf("1) Flash new kernver \n");
 		printf("2) Run KAUB (Kernver Automatic Update Blocker) \n");
 		printf("3) Kernver FAQ \n");
