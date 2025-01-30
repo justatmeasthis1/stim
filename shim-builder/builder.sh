@@ -2,8 +2,8 @@
 
 SCRIPT_DIR=$(dirname "$0")
 VERSION=2.0.0
-
 HOST_ARCH=$(arch)
+
 if [ $HOST_ARCH == "x86_64" ]; then
 	CGPT="$SCRIPT_DIR/bins/cgpt.x86-64"
 	SFDISK="$SCRIPT_DIR/bins/sfdisk.x86-64"
@@ -32,11 +32,15 @@ IMG="$1"
 
 echo "Before building, huge credits to the MercuryWorkshop team for their work on wax,"
 echo "some of this builder would have been impossible without it, at least with my disk knowledge"
-echo "-=-=-=-=-=-=-=-=-=-=-"
-echo "Press ENTER to continue building!"
-read -r
-echo "-=-=-=-=-=-=-=-=-=-=-"
 
+if [ ! -z "$AUTOBUILD" ]; then
+	echo "cont"
+else
+	echo "-=-=-=-=-=-=-=-=-=-=-"
+	echo "Press ENTER to continue building!"
+	read -r
+	echo "-=-=-=-=-=-=-=-=-=-=-"
+fi
 # we need this before we re-create stateful
 STATE_START=$("$CGPT" show "$IMG" | grep "STATE" | awk '{print $1}')
 suppress shrink_partitions "$IMG"

@@ -217,6 +217,13 @@ inject_root(){
 	log "Injecting ROOT-A Partition"
 	detect_arch
 
+	if [[ ! -d "$SCRIPT_DIR/../build/$TARGET_ARCH" ]]; then
+		echo "You need to build KVS for $TARGET_ARCH first!"
+		losetup -D
+
+		exit 1
+	fi
+	
 	echo "Mounting root.."
 	suppress enable_rw_mount "$LOOPDEV"p3
 	suppress mount "$LOOPDEV"p3 "$ROOT_MNT"
