@@ -39,6 +39,9 @@ void ui_flash(char* flashtype) {
 			sleep(86400);
 		}
 
+		printf("To properly set your kernver, you need to downgrade first in dev mode. \nThis is because vboot will set the kernver based on whatever kernel version is signed on-disk\n");
+		sleep(5);
+
 		// we check if its *false* since strcmp returns true if failing
 		if (!strcmp(KERNVER_TYPE, "v0")){ 
 			char cmd[128];
