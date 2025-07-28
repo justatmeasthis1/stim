@@ -6,18 +6,22 @@
 #include "sysinfo.h"
 #include "arg_checks.h"
 
-void kernver_faq(){
-	printf(
-		"Basic kernver FAQ: \n"
-		"Updated: 12/28/24 1:46 PM EST\n"
-		"------------------------------------------\n"
-		"Kernver 0: All versions will boot\n"
-		"Kernver 1: All versions will boot\n"
-		"Kernver 2: Versions R112 and up will boot\n"
-		"Kernver 3: Versions R120 and up will boot\n"
-		"Kernver 4: Versions R125 and up will boot\n"	
-	);
-};
+void kernver_faq() {
+    printf(
+        "--------- KV Compatibility list ---------\n"
+        "Last Updated: 2025-06-28 12:40 PM ET\n"
+        "-----------------------------------------\n"
+        "Kernver 0:  Boots all versions\n"
+        "Kernver 1:  Boots all versions\n"
+        "Kernver 2:  Boots R112 and up\n"
+        "Kernver 3:  Boots R120 and up\n"
+        "Kernver 4:  Boots R125 and up\n"
+        "Kernver 5:  Boots R133* and up\n"
+        "-----------------------------------------\n"
+        "* Note: Some late R132 builds are Kernver 5, but hard to find.\n"
+    );
+}
+
 
 void dbgprintf(char* text){
 	if (fbool("--debug","-d")){
