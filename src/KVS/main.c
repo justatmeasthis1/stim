@@ -9,7 +9,7 @@
 void kernver_faq() {
     printf(
         "--------- KV Compatibility list ---------\n"
-        "Last Updated: 2025-06-28 12:40 PM ET\n"
+        "Last Updated: 2025-07-28 12:40 PM ET\n"
         "-----------------------------------------\n"
         "Kernver 0:  Boots all versions\n"
         "Kernver 1:  Boots all versions\n"
