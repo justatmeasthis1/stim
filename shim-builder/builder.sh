@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=$(dirname "$0")
 VERSION=2.0.0
-HOST_ARCH=$(arch)
+HOST_ARCH=$(uname -m)
 
 if [ $HOST_ARCH == "x86_64" ]; then
 	CGPT="$SCRIPT_DIR/bins/cgpt.x86-64"
