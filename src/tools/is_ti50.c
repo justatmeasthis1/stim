@@ -130,13 +130,15 @@ bool is_ti50(int *rc)
     tpm = open("/dev/tpm0", O_RDWR);
     if (tpm < 0) {
         fprintf(stderr, "Error: Cannot open TPM device: %s\n", strerror(errno));
+		*rc = -1;
         return false;
     }
 
     if (send_payload(0, 0, NULL, 0, VENDOR_CC_GET_TI50_STATS) != 0) {
         fprintf(stderr, "Error: Failed to send GET_TI50_STATS to TPM.\n");
         close(tpm);
-        return false;
+        *rc = -1;
+		return false;
     }
 
     int rv = read_response(&resp, &response_size);
@@ -161,9 +163,11 @@ int main() {
         printf("TPM 1.2\n");
     } else if (rc == VENDOR_RC_NO_SUCH_COMMAND) {
         printf("Cr50\n");
-    } else {
+    } else if (rc > 0) {
         printf("Ti50\n");
-    }
+    } else {
+		printf("Unknown\n");
+	}
 
     return rc;
 }
