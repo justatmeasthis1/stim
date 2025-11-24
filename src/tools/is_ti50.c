@@ -9,8 +9,6 @@
 #include <unistd.h>
 #include <linux/types.h>
 
-
-#define VENDOR_CC_GET_AP_RO_STATUS 57
 static inline int MIN(int a, int b) { return a < b ? a : b; }
 #define EXTENSION_FW_UPGRADE 4
 #define LAST_EXTENSION_COMMAND 15
@@ -21,23 +19,28 @@ static inline int MIN(int a, int b) { return a < b ? a : b; }
 #define MAX_TX_BUF_SIZE (SIGNED_TRANSFER_SIZE + sizeof(struct tpm_pkt))
 #define VENDOR_RC_ERR 0x500
 
+#define VENDOR_RC_NO_SUCH_COMMAND 127
+#define VENDOR_CC_GET_TI50_STATS 65
+// TPM_RC == uint32_t
+constexpr uint32_t TPM_RC_BAD_TAG = 0x01E;
+
 int tpm;
 
 struct tpm_pkt {
-	__be16 tag;
-	__be32 length;
-	__be32 ordinal;
-	__be16 subcmd;
-	union {
-		struct {
-			__be32 digest;
-			__be32 address;
-			char data[0];
-		} upgrade;
-		struct {
-			char data[0];
-		} command;
-	};
+    __be16 tag;
+    __be32 length;
+    __be32 ordinal;
+    __be16 subcmd;
+    union {
+        struct {
+            __be32 digest;
+            __be32 address;
+            char data[0];
+        } upgrade;
+        struct {
+            char data[0];
+        } command;
+    };
 } __attribute__((packed));
 
 
@@ -73,10 +76,10 @@ static int send_payload(unsigned int digest, unsigned int addr,
 
 	if (done < 0) {
 		fprintf(stderr, "Error: Failed to write to TPM, %s.\n", strerror(errno));
-		return 1;
+		return -1;
 	}else if (done != len) {
 		fprintf(stderr, "Error: Expected to write %d bytes to TPM, instead wrote %d. %s\n", len, done, strerror(errno));
-		return 1;
+		return -1;
 	}
 
 	return 0;
@@ -104,7 +107,7 @@ static int read_response(void *response, size_t *response_size)
     len = len - response_offset;
 	if (len < 0) {
 		fprintf(stderr, "Error: Problems reading from TPM, got %d bytes.\n", len + response_offset);
-		return 1;
+		return -1;
 	}
 
 	len = MIN(len, *response_size);
@@ -121,36 +124,42 @@ static int read_response(void *response, size_t *response_size)
 
 bool is_ti50(int *rc)
 {
-	uint8_t resp;
-	size_t response_size = sizeof(resp);
+    uint8_t resp;
+    size_t response_size = sizeof(resp);
 
     tpm = open("/dev/tpm0", O_RDWR);
-
-	if (send_payload(0, 0, NULL, 0, VENDOR_CC_GET_AP_RO_STATUS) != 0) {
-	    fprintf(stderr, "Error: Failed to write AP RO Status request to TPM.\n");
+    if (tpm < 0) {
+        fprintf(stderr, "Error: Cannot open TPM device: %s\n", strerror(errno));
         return false;
-	}
-	if (read_response(&resp, &response_size) != 0) {
-		fprintf(stderr, "Error: Failed to read AP RO Status from TPM.\n");
-        return false;
-	}
+    }
 
-	if (resp == 0x01E) {
-		*rc = resp;
+    if (send_payload(0, 0, NULL, 0, VENDOR_CC_GET_TI50_STATS) != 0) {
+        fprintf(stderr, "Error: Failed to send GET_TI50_STATS to TPM.\n");
+        close(tpm);
         return false;
-	}
+    }
 
-    return resp != 4;
+    int rv = read_response(&resp, &response_size);
+    close(tpm);
+
+    *rc = rv;
+
+    if (rv == TPM_RC_BAD_TAG)     				 // TPM 1.2
+        return false;
+    else if (rv == VENDOR_RC_NO_SUCH_COMMAND) 	 // Cr50
+        return false;
+    else 										 // valid Ti50 response
+        return true;
 }
 
-int main(){
+int main() {
     int rc;
 
     bool ti50 = is_ti50(&rc);
 
-    if (rc == 0x01E){
+    if (rc == TPM_RC_BAD_TAG) {
         printf("TPM 1.2\n");
-    } else if (!ti50){
+    } else if (rc == VENDOR_RC_NO_SUCH_COMMAND) {
         printf("Cr50\n");
     } else {
         printf("Ti50\n");
