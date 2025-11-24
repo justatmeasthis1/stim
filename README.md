@@ -36,7 +36,7 @@ Press the Settings (⚙️) icon in the top right, and press "Use Local Image". 
 After flashing the USB/SD, insert the newly-flashed USB/SD into your target device. Once inserted, press ESC + REFRESH (↻) + PWR (⏻) and then press CTRL+D and then enter.
 
 Once in Developer Mode, your screen should look similar to this:
-![image](https://kxtz.dev/media/dev-mode.png) 
+![image](https://kxtz.dev/media/dev-mode.png)
 
 Now, press ESC + REFRESH (↻) + PWR (⏻) again and it should load into KVS.
 
