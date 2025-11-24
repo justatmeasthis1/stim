@@ -7,7 +7,7 @@ KVS: Kernel Version Switcher (anti-rollback rollbacker)
 
 
 > [!IMPORTANT]  
-> This requires an unenrolled device. Any errors relating to being enrolled will be ignored and closed.
+> This requires an unenrolled device. Any errors relating to being enrolled will be ignored and closed. <br />
 > this doesn't include partial-unenrollment (e.g: OOBEScape)
 
 ## Build Instructions
