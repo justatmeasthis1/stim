@@ -8,6 +8,7 @@ KVS: Kernel Version Switcher (anti-rollback rollbacker)
 
 > [!IMPORTANT]  
 > This requires an unenrolled device. Any errors relating to being enrolled will be ignored and closed.
+> this doesn't include partial-unenrollment (e.g: OOBEScape)
 
 ## Build Instructions
 1) Clone the repo: <br />
