@@ -22,7 +22,7 @@ static inline int MIN(int a, int b) { return a < b ? a : b; }
 #define VENDOR_RC_NO_SUCH_COMMAND 127
 #define VENDOR_CC_GET_TI50_STATS 65
 // TPM_RC == uint32_t
-constexpr uint32_t TPM_RC_BAD_TAG = 0x01E;
+uint32_t TPM_RC_BAD_TAG = 0x01E;
 
 int tpm;
 
