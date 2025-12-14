@@ -234,9 +234,9 @@ inject_root(){
 	mv "$ROOT_MNT"/bin/is_ti50 "$ROOT_MNT"/opt/kvs/bin/is_ti50
 	echo 'export PATH=$PATH:/opt/kvs/bin' >> "$ROOT_MNT"/root/.bashrc
 
-	echo "Removing tcsd & trunksd.."
-	rm -rf "$ROOT_MNT"/etc/init/tcsd.conf
-	rm -rf "$ROOT_MNT"/etc/init/trunksd.conf
+	# echo "Removing tcsd & trunksd.."
+	# rm -rf "$ROOT_MNT"/etc/init/tcsd.conf
+	# rm -rf "$ROOT_MNT"/etc/init/trunksd.conf
 
 	echo "$(date +'%m-%d-%Y %I:%M%p %Z')" > "$ROOT_MNT"/DATE_COMPILED
 	suppress umount "$ROOT_MNT"
