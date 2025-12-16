@@ -5,6 +5,7 @@ first2=$(echo "$fullpath" | cut -d/ -f-3)
 RED='\e[31m'
 RESET='\e[0m'
 echo "Installed payloads, STIM, FMN, debug bash"
+echo "graceless one wuz here"
 if [ "$first2" = "/home/user" ]; then
 echo -e "${RED}WARNING, DEMO MODE IS ON${RESET} what does this mean? it means that you are currently not in a factory shim and scripts may not work properly."
 sleep 7
