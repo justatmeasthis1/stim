@@ -1,7 +1,12 @@
 #!/bin/bash
 clear
 fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-first2=/home/user
+demo=1
+first2=$(echo "$fullpath" | cut -d/ -f-3)
+if [ "first2" = "/home/user" ]; then
+    demo=1
+    break
+fi
 SCRIPT_DATE="[dec 16 2025]"
 RED='\e[31m'
 RESET='\e[0m'
@@ -9,11 +14,26 @@ echo "Installed payloads; STIM, FMN, debug bash"
 echo "MODS, Hardcoded demo mode."
 echo "Made in $SCRIPT_DATE"
 sleep 3
-if [ "$first2" = "/home/user" ]; then
-demo=1
+clear
+echo "To navigate through UI, type the number corresponding to the place you'd like to goto, then press enter. like here!"
+echo "1) Continue"
+read -ep "Which option would you like to goto? "
+if [ "$demo" = "1" ]; then
+clear
 echo -e "${RED}WARNING, DEMO MODE IS ON${RESET} what does this mean? it means that you are currently not in a factory shim and scripts may not work properly."
-sleep 7
-break
+echo "Continue? (y/n, case sensitive)"
+read -ep "Enter: " warndemo
+case $warndemo in
+    "y")
+    break
+    ;;
+    "n")
+    exit
+    ;;
+    *)
+    read -ep "invalid input, press enter to try again."
+    ;;
+esac
 fi
 userroot=Guest
 userrootopposite=Admin
@@ -245,7 +265,7 @@ echo -e "Currently logged in as: ${RED}$userroot${RESET}"
 echo
 echo
 echo "What would you like to do?"
-    echo -e "1) Goto ${YELLOW}FMN${RESET}"
+    echo -e "1) Goto ${YELLOW}FMN${RESET} (Used for blocking updates)"
     echo -e "2) Login as ${GREEN}$userrootopposite${RESET}"
     echo "3) Creds :)"
     echo "4) Reboot"
@@ -308,7 +328,8 @@ else
             ;;
         *)
 		if [ "$demo" = "1" ]; then
-		echo "Demo mode is on, granting admin privilages :)"
+		echo "Me when demo = 1"
+        sleep 3
 		userroot=Admin
         userrootopposite=Guest
         failedtries=0
