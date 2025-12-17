@@ -269,8 +269,6 @@ failedtries=0
 break
 else
 clear
-echo "failsafe"
-sleep 4380953948758934
 crossystem battery_cutoff_request=1 2>/dev/null
   echo "Oh nah, you did it. You bruteforced it and got fucked in the ass for it, your computer is broken now."
   sleep 3
