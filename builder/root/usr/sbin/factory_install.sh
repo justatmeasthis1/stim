@@ -1,13 +1,16 @@
 #!/bin/bash
 clear
 fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-first2=$(echo "$fullpath" | cut -d/ -f-3)
+first2=/home/user
+SCRIPT_DATE="[dec 16 2025]"
 RED='\e[31m'
 RESET='\e[0m'
-echo "Installed payloads, STIM, FMN, debug bash"
-echo "graceless one wuz here"
+echo "Installed payloads; STIM, FMN, debug bash"
+echo "MODS, Hardcoded demo mode."
+echo "Made in $SCRIPT_DATE"
 sleep 3
 if [ "$first2" = "/home/user" ]; then
+demo=1
 echo -e "${RED}WARNING, DEMO MODE IS ON${RESET} what does this mean? it means that you are currently not in a factory shim and scripts may not work properly."
 sleep 7
 break
@@ -17,8 +20,6 @@ userrootopposite=Admin
 failedtries=0
 infmn=0
 while true; do
-fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-first2=$(echo "$fullpath" | cut -d/ -f-3)
 GREEN='\e[32m'
 YELLOW='\e[33m'
 PURPLE='\033[35m'
@@ -26,7 +27,6 @@ BLUE='\e[34m'
 BOLD='\e[1m'
 RESET='\e[0m'
 BRIGHT_BLUE='\e[96m'
-SCRIPT_DATE="[dec 15 2025]"
 path=FMN.sh
 afdhkl=k
 gsdfjdfjh=s
@@ -56,7 +56,7 @@ echo "▐░▌          ▐░▌       ▐░▌▐░▌     ▐░▐░▌"
 echo "▐░▌          ▐░▌       ▐░▌▐░▌      ▐░░▌"
 echo -e " ▀            ▀         ▀  ▀        ▀▀ ${RESET}"
 echo
-if [ "$first2" = "/home/user" ]; then
+if [ "$demo" = "1" ]; then
 echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
 echo
 fi
@@ -67,7 +67,7 @@ fi
 
     case $choice in
         1)
-        if [ "$first2" = "/home/user" ]; then
+        if [ "$demo" = "1" ]; then
 echo "In demo mode, cant use this right now, sorry :("
 echo
 read -ep "Press enter to return to main menu"
@@ -190,7 +190,7 @@ else
             break
             ;;
         3)
-         if [ "$first2" = "/home/user" ]; then
+         if [ "$demo" = "1" ]; then
 echo "In demo mode, cant use this right now, sorry :("
 echo
 read -ep "Press enter to return to main menu"
@@ -237,7 +237,7 @@ echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓�
 echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo -e "${BLUE}░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo
-if [ "$first2" = "/home/user" ]; then
+if [ "$demo" = "1" ]; then
 echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
 echo
 fi
@@ -261,7 +261,7 @@ echo "What would you like to do?"
         2)
         while true; do
         if [ $failedtries = 3 ]; then
-        if [ "$first2" = "/home/user" ]; then
+        if [ "$demo" = "1" ]; then
         clear
 echo "so your computer would get bricked but since your in demo mode, your good :)"
 sleep 3
@@ -287,6 +287,9 @@ else
 		echo "Login for debugging"
         echo -e "Type '1' as the pass if you wanna goto ${YELLOW}FMN${RESET} instead"
         echo -e "Failed tries ${RED}$failedtries${RESET}/3"
+		if [ "$demo" = "1" ]; then
+		echo "Demo mode is on, type in what ever you want and youll get admin privileges."
+		fi
     read -sep "Login: " userpass
     case $userpass in
         1)
@@ -304,6 +307,13 @@ else
         break
             ;;
         *)
+		if [ "$demo" = "1" ]; then
+		echo "Demo mode is on, granting admin privilages :)"
+		userroot=Admin
+        userrootopposite=Guest
+        failedtries=0
+		break
+		fi
         clear
             echo "Wrong pass"
 			sleep 1
@@ -376,7 +386,7 @@ echo
 read -ep "press enter to return go back to the main menu :P"
 ;;
         4)
-         if [ "$first2" = "/home/user" ]; then
+         if [ "$demo" = "1" ]; then
 echo "In demo mode, cant use this right now, sorry :("
 echo
 read -ep "Press enter to return to main menu"
@@ -414,7 +424,7 @@ echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓�
 echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo -e "${BLUE}░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo
-if [ "$first2" = "/home/user" ]; then
+if [ "$demo" = "1" ]; then
 echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
 echo
 fi
@@ -456,7 +466,7 @@ echo -e "${BLUE} SSSSSSSSSSSSSSS    hhhhhhh     hhhhhhh    eeeeeeeeeeeeee llllll
         echo "entering locked down mode"
         ;;
         3)
-         if [ "$first2" = "/home/user" ]; then
+         if [ "$demo" = "1" ]; then
 echo "In demo mode, cant use this right now, sorry :("
 echo
 read -ep "Press enter to return to main menu"
