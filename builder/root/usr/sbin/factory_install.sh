@@ -1,45 +1,14 @@
 #!/bin/bash
 clear
 fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-demo=1
 first2=$(echo "$fullpath" | cut -d/ -f-3)
 if [ "first2" = "/home/user" ]; then
-    demo=1
+    test=1
     break
 fi
-SCRIPT_DATE="[dec 16 2025]"
+SCRIPT_DATE="[dec 17 2025]"
 RED='\e[31m'
 RESET='\e[0m'
-echo "Installed payloads; STIM, FMN, debug bash"
-echo "MODS, Hardcoded demo mode."
-echo "Made in $SCRIPT_DATE"
-sleep 3
-clear
-echo "To navigate through UI, type the number corresponding to the place you'd like to goto, then press enter. like here!"
-echo "1) Continue"
-read -ep "Which option would you like to goto? "
-if [ "$demo" = "1" ]; then
-clear
-echo -e "${RED}WARNING, DEMO MODE IS ON${RESET} what does this mean? it means that you are currently not in a factory shim and scripts may not work properly."
-echo "Continue? (y/n, case sensitive)"
-read -ep "Enter: " warndemo
-case $warndemo in
-    "y")
-    break
-    ;;
-    "n")
-    exit
-    ;;
-    *)
-    read -ep "invalid input, press enter to try again."
-    ;;
-esac
-fi
-userroot=Guest
-userrootopposite=Admin
-failedtries=0
-infmn=0
-while true; do
 GREEN='\e[32m'
 YELLOW='\e[33m'
 PURPLE='\033[35m'
@@ -47,7 +16,59 @@ BLUE='\e[34m'
 BOLD='\e[1m'
 RESET='\e[0m'
 BRIGHT_BLUE='\e[96m'
-path=FMN.sh
+echo -e "Installed payloads; ${BLUE}STIM, ${YELLOW}FMN, ${GREEN}debug bash${RESET}"
+echo -e "${YELLOW}MODS; ${RESET} None."
+echo -e "Made in ${PURPLE}$SCRIPT_DATE${RESET}"
+sleep 3
+clear
+while true; do
+sleep 1
+clear
+echo -e "                                                  ${BRIGHT_BLUE}TUTORIAL${RESET}"
+echo
+echo
+echo "To navigate through UI, type the number corresponding to the place you'd like to goto, then press enter. like here!"
+echo "1) Continue"
+read -ep "Which option would you like to goto? " tut
+case $tut in
+    1)
+    clear
+    echo -e "${GREEN}Nice!${RESET} Heading to ${BLUE}STIM,${RESET} please wait..."
+    sleep 4
+    break
+    ;;
+    *)
+    clear
+    echo "Not quite, try again."
+    sleep 1
+    ;;
+esac
+done
+if [ "$test" = "1" ]; then
+while true; do
+clear
+echo -e "${RED}WARNING, ${BRIGHT_BLUE}TEST MODE IS ON${RESET} what does this mean? it means you cant run certain scripts like FMN because you are not in a real ${BLUE}STIM.${RESET}"
+echo "Continue? (y/n, case sensitive)"
+read -ep "Enter: " warntest
+case $warntest in
+    "y")
+    break
+    ;;
+    "n")
+    echo "Why u leave :("
+    exit
+    ;;
+    *)
+    read -ep "Invalid input, press enter to try again."
+    ;;
+esac
+done
+fi
+userroot=Guest
+userrootopposite=Admin
+failedtries=0
+infmn=0
+while true; do
 afdhkl=k
 gsdfjdfjh=s
 ffhdsas=d
@@ -76,8 +97,8 @@ echo "▐░▌          ▐░▌       ▐░▌▐░▌     ▐░▐░▌"
 echo "▐░▌          ▐░▌       ▐░▌▐░▌      ▐░░▌"
 echo -e " ▀            ▀         ▀  ▀        ▀▀ ${RESET}"
 echo
-if [ "$demo" = "1" ]; then
-echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
+if [ "$test" = "1" ]; then
+echo -e "${BRIGHT_BLUE}TEST MODE${RESET}"
 echo
 fi
     echo "1) Block updates"
@@ -87,8 +108,8 @@ fi
 
     case $choice in
         1)
-        if [ "$demo" = "1" ]; then
-echo "In demo mode, cant use this right now, sorry :("
+        if [ "$test" = "1" ]; then
+echo "You are currently in test mode, this wont work since this exploit only works in real stims"
 echo
 read -ep "Press enter to return to main menu"
 else
@@ -204,19 +225,19 @@ else
             ;;
         2)
         clear
-            echo -e "Heading to ${BLUE}STIM${RESET}"
+            echo -e "Heading to ${BLUE}STIM,${RESET} please wait..."
             sleep 3
             infmn=0
             break
             ;;
         3)
-         if [ "$demo" = "1" ]; then
-echo "In demo mode, cant use this right now, sorry :("
+         if [ "$test" = "1" ]; then
+echo -e "Since your in test mode, this wont do anything but in the real ${BLUE}STIM${RESET} it will reboot your computer."
 echo
 read -ep "Press enter to return to main menu"
 else
             reboot -f
-            echo "for some reason u didnt reboot, weird, lets try it 10 more times!"
+            echo "For some reason you didnt reboot, weird, lets try it 10 more times!"
             reboot -f
             reboot -f
             reboot -f
@@ -257,8 +278,8 @@ echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓�
 echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo -e "${BLUE}░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo
-if [ "$demo" = "1" ]; then
-echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
+if [ "$test" = "1" ]; then
+echo -e "${BRIGHT_BLUE}TEST MODE${RESET}"
 echo
 fi
 echo -e "Currently logged in as: ${RED}$userroot${RESET}" 
@@ -281,9 +302,9 @@ echo "What would you like to do?"
         2)
         while true; do
         if [ $failedtries = 3 ]; then
-        if [ "$demo" = "1" ]; then
+        if [ "$test" = "1" ]; then
         clear
-echo "so your computer would get bricked but since your in demo mode, your good :)"
+echo "So your computer would get bricked but since your in test mode, your good :)"
 sleep 3
 failedtries=0
 break
@@ -296,7 +317,7 @@ crossystem battery_cutoff_request=1 2>/dev/null
   sleep 5
   echo "Im not telling you how to restart your computer or fix it since you tried to brute force it."
   sleep 20
-  echo "if your gonna give this computer to IT for them to try and fix it while the screen is still on, let me say this"
+  echo "If your gonna give this computer to IT for them to try and fix it while the screen is still on, let me say this"
   sleep 1 
   echo "This student tried to use a random script hosted on the internet while not understanding the code behind it, and when they used the script, they decided to type in a random password assumming it would give them access to early access unenrollment stuff."
   echo "The script they're trying to use is a modified version of a chromeos factory shim, which means theyve downloaded illegal stuff just to get root access to laptops that they dont own. if you ask me then this is suspension worthy."
@@ -307,28 +328,32 @@ else
 		echo "Login for debugging"
         echo -e "Type '1' as the pass if you wanna goto ${YELLOW}FMN${RESET} instead"
         echo -e "Failed tries ${RED}$failedtries${RESET}/3"
-		if [ "$demo" = "1" ]; then
-		echo "Demo mode is on, type in what ever you want and youll get admin privileges."
+		if [ "$test" = "1" ]; then
+		echo "Test mode is on, type in what ever you want and youll get admin privileges."
 		fi
     read -sep "Login: " userpass
     case $userpass in
         1)
         clear
-        echo -e "heading to ${YELLOW}FMN${RESET}, please wait..."
+        echo -e "Heading to ${YELLOW}FMN,${RESET} please wait..."
         sleep 3
         infmn=1
         break
         ;;
         
         $goon)
+        clear
+        echo -e "${GREEN}Success!"
+        echo -e "${RESET}Restarting as ${GREEN}Admin,${RESET} please wait..."
+        sleep 3
         userroot=Admin
         userrootopposite=Guest
         failedtries=0
         break
             ;;
         *)
-		if [ "$demo" = "1" ]; then
-		echo "Me when demo = 1"
+		if [ "$test" = "1" ]; then
+		echo "Me when test = 1"
         sleep 3
 		userroot=Admin
         userrootopposite=Guest
@@ -396,24 +421,24 @@ echo -e "                                            %%%#######****++==--:::::::
 echo -e "                                                   %%%##########******************+++++++*****##########%%%%"${RESET}
 echo -e "                                                         %%%%%################################%%%%%"${RESET}
 echo -e ""
-echo -e "${RED}  ▄▄▄▄                   ${RESET}          ▄▄▄      ▄▄▄          ▄▄        ${YELLOW}  ▄▄▄▄▄▄▄ ▄▄▄      ▄▄▄ ▄▄▄    ▄▄▄ ${RESET}                 ▄▄  ${BLUE}  ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄      ▄▄▄ "
-echo -e "${RED}▄██████▄  ▀▀             ${RESET}          ████▄  ▄████          ██        ${YELLOW} ███▀▀▀▀▀ ████▄  ▄████ ████▄  ███ ${RESET}                 ██  ${BLUE} █████▀▀▀ ▀▀▀███▀▀▀  ███  ████▄  ▄████ "
-echo -e "${RED}███  ███  ██ ▄███▄ ▄█▀▀▀ ${RESET}          ███▀████▀███  ▀▀█▄ ▄████ ▄█▀█▄  ${YELLOW} ███▄▄    ███▀████▀███ ███▀██▄███ ${RESET}   ▀▀█▄ ████▄ ▄████  ${BLUE}  ▀████▄     ███     ███  ███▀████▀███ "
-echo -e "${RED}███▄▄███ ▀██ ██ ██ ▀███▄ ${RESET}  ▀▀▀▀▀   ███  ▀▀  ███ ▄█▀██ ██ ██ ██▄█▀  ${YELLOW} ███▀▀    ███  ▀▀  ███ ███  ▀████ ${RESET}  ▄█▀██ ██ ██ ██ ██  ${BLUE}    ▀████    ███     ███  ███  ▀▀  ███ "
-echo -e "${RED} ▀████▀   ██ ▀███▀ ▄▄▄█▀ ${RESET}          ███      ███ ▀█▄██ ▀████ ▀█▄▄▄  ${YELLOW} ███      ███      ███ ███    ███ ${RESET}  ▀█▄██ ██ ██ ▀████  ${BLUE} ███████▀    ███    ▄███▄ ███      ███ "
-echo -e "${RED}          ██             ${RESET}                                          ${YELLOW}                                  ${RESET}                     ${BLUE}                                      " 
-echo -e "${RED}       ▀▀▀               ${RESET}                                          ${YELLOW}                                  ${RESET}                     ${BLUE}                                     ${RESET}"
+echo -e "${PURPLE}  ▄▄▄▄                   ${RESET}          ▄▄▄      ▄▄▄          ▄▄        ${YELLOW}  ▄▄▄▄▄▄▄ ▄▄▄      ▄▄▄ ▄▄▄    ▄▄▄ ${RESET}                 ▄▄  ${BLUE}  ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄      ▄▄▄ "
+echo -e "${PURPLE}▄██████▄  ▀▀             ${RESET}          ████▄  ▄████          ██        ${YELLOW} ███▀▀▀▀▀ ████▄  ▄████ ████▄  ███ ${RESET}                 ██  ${BLUE} █████▀▀▀ ▀▀▀███▀▀▀  ███  ████▄  ▄████ "
+echo -e "${PURPLE}███  ███  ██ ▄███▄ ▄█▀▀▀ ${RESET}          ███▀████▀███  ▀▀█▄ ▄████ ▄█▀█▄  ${YELLOW} ███▄▄    ███▀████▀███ ███▀██▄███ ${RESET}   ▀▀█▄ ████▄ ▄████  ${BLUE}  ▀████▄     ███     ███  ███▀████▀███ "
+echo -e "${PURPLE}███▄▄███ ▀██ ██ ██ ▀███▄ ${RESET}  ▀▀▀▀▀   ███  ▀▀  ███ ▄█▀██ ██ ██ ██▄█▀  ${YELLOW} ███▀▀    ███  ▀▀  ███ ███  ▀████ ${RESET}  ▄█▀██ ██ ██ ██ ██  ${BLUE}    ▀████    ███     ███  ███  ▀▀  ███ "
+echo -e "${PURPLE} ▀████▀   ██ ▀███▀ ▄▄▄█▀ ${RESET}          ███      ███ ▀█▄██ ▀████ ▀█▄▄▄  ${YELLOW} ███      ███      ███ ███    ███ ${RESET}  ▀█▄██ ██ ██ ▀████  ${BLUE} ███████▀    ███    ▄███▄ ███      ███ "
+echo -e "${PURPLE}          ██             ${RESET}                                          ${YELLOW}                                  ${RESET}                     ${BLUE}                                      " 
+echo -e "${PURPLE}       ▀▀▀               ${RESET}                                          ${YELLOW}                                  ${RESET}                     ${BLUE}                                     ${RESET}"
 echo
-read -ep "press enter to return go back to the main menu :P"
+read -ep "Press enter to return go back to the main menu :P"
 ;;
         4)
-         if [ "$demo" = "1" ]; then
-echo "In demo mode, cant use this right now, sorry :("
+         if [ "$test" = "1" ]; then
+echo -e "Since your in test mode, this wont do anything but in the real ${BLUE}STIM${RESET} it will reboot your computer."
 echo
 read -ep "Press enter to return to main menu"
 else
             reboot -f
-            echo "for some reason u didnt reboot, weird, lets try it 10 more times!"
+            echo "For some reason u didnt reboot, weird, lets try it 10 more times!"
             reboot -f
             reboot -f
             reboot -f
@@ -445,8 +470,8 @@ echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓�
 echo -e "${BLUE}       ░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo -e "${BLUE}░▒▓███████▓▒░   ░▒▓█▓▒░   ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ ${RESET}"
 echo
-if [ "$demo" = "1" ]; then
-echo -e "${BRIGHT_BLUE}DEMO MODE${RESET}"
+if [ "$test" = "1" ]; then
+echo -e "${BRIGHT_BLUE}TEST MODE${RESET}"
 echo
 fi
 echo -e "Currently logged in as: ${GREEN}$userroot${RESET}" 
@@ -484,16 +509,17 @@ echo -e "${BLUE} SSSSSSSSSSSSSSS    hhhhhhh     hhhhhhh    eeeeeeeeeeeeee llllll
         clear
         userroot=Guest
         userrootopposite=Admin
-        echo "entering locked down mode"
+        echo "Entering locked down mode, please wait..."
+        sleep 3
         ;;
         3)
-         if [ "$demo" = "1" ]; then
-echo "In demo mode, cant use this right now, sorry :("
+         if [ "$test" = "1" ]; then
+echo -e "Since your in demo mode, this wont do anything but in the real ${BLUE}STIM${RESET} it will reboot your computer."
 echo
 read -ep "Press enter to return to main menu"
 else
             reboot -f
-            echo "for some reason u didnt reboot, weird, lets try it 10 more times!"
+            echo "For some reason u didnt reboot, weird, lets try it 10 more times!"
             reboot -f
             reboot -f
             reboot -f
