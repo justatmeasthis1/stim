@@ -1,4 +1,5 @@
 #!/bin/bash
+reset
 clear
 fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 first2=$(echo "$fullpath" | cut -d/ -f-3)
@@ -481,6 +482,7 @@ echo "What would you like to do?"
     echo "1) Goto shell for debugging"
     echo -e "2) Login as ${RED}$userrootopposite${RESET}"
     echo "3) Reboot"
+	echo "4) Choose GBB flags
         read -ep "Choose Option: " userchoice
 case $userchoice in
         1)
