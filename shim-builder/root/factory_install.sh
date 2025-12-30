@@ -1,13 +1,143 @@
 #!/bin/bash
 reset
 clear
+DOWNLOADS_DIR=/usr/sbin
+RECOVERY_KEY_FILE=dedede_recovery_v1.vbpubk
+wpdis() {
+failedwp=0
+while true; do
+clear
+echo -e "Press CTRL + C to cancel"
+if flashrom --wp-disable; then
+clear
+echo -e "${GREEN}SUCCESSSSSSSSSS YAYYYYYYYYY${RESET} (It took ${BRIGHT_BLUE}$failedwp${RESET} tries, cool!)"
+sleep 3
+break
+else
+echo -e ${RED}Failed.${RESET} Attempt ${RED}$failedwp${RESET}
+let "failedwp+=1"
+fi
+done
+}
+unkeyroll() {
+while true; do
+if flashrom --wp-disable; then
+echo -e "\e[31mFlashing key\e[0m"
+futility gbb -s --flash --recoverykey="$DOWNLOADS_DIR/$RECOVERY_KEY_FILE"
+clear
+
+# Check if application was successful
+if [ $? -eq 0 ]; then
+    echo -e "\033[32mApplied the recovery key successfully, yippee!!\033[0m"
+    sleep 3
+    break
+else
+    echo -e "\e[31mFailed. Trying to fix chromebook, please wait.\e[0m"
+        echo -e "\e[31mThis shouldn't ever happen!\e[0m"
+    # Clear the vbpubk files from the Downloads folder only if the previous command fails
+    exit 1
+    sleep 3
+    break
+fi
+else
+echo "Disable WP dumbass!!"
+sleep 3
+break
+fi
+done
+}
+gbbflagger() {
+while true; do
+# Made by 0jos, creds to olyb & ChromeOS authors
+if flashrom --wp-disable; then
+old=$(futility gbb -g --flash --flags | tail -n 1)
+
+flags=(
+  "DEV_SCREEN_SHORT_DELAY|Makes dev screen timeout reduce to 2 seconds, beep is also gone|ok"
+  "LOAD_OPTION_ROMS|BIOS should load option ROMs from arbitrary PCI devices.|unsupported"
+  "ENABLE_ALTERNATE_OS|Boot a non-ChromeOS kernel.|unsupported"
+  "FORCE_DEV_SWITCH_ON|Forces devmode (does NOT bypass FWMP)|ok"
+  "FORCE_DEV_BOOT_USB|Allow booting from external disk even if dev_boot_usb=0.|ok"
+  "DISABLE_FW_ROLLBACK_CHECK|Disable firmware rollback protection.|ok"
+  "ENTER_TRIGGERS_TONORM|Allow Enter key to trigger dev->tonorm transition.|ok"
+  "FORCE_DEV_BOOT_ALTFW|Allow booting altfw OSes even if dev_boot_altfw=0.|ok"
+  "DEPRECATED_RUNNING_FAFT|Running FAFT tests (should NOT be set).|unsupported"
+  "DISABLE_EC_SOFTWARE_SYNC|Disable EC software sync.|ok"
+  "DEFAULT_DEV_BOOT_ALTFW|Default to booting altfw OS when dev screen times out.|ok"
+  "DISABLE_AUXFW_SOFTWARE_SYNC|Disable auxiliary firmware software sync.|ok"
+  "DISABLE_LID_SHUTDOWN|Disable shutdown on lid closed.|ok"
+  "DEPRECATED_FORCE_DEV_BOOT_FASTBOOT_FULL_CAP|Allow full fastboot capability.|unsupported"
+  "FORCE_MANUAL_RECOVERY|Recovery mode always assumes manual recovery.|ok"
+  "DISABLE_FWMP|Ignore FWMP (highly recommended).|ok"
+  "ENABLE_UDC|Enable USB Device Controller.|ok"
+  "FORCE_CSE_SYNC|Always sync CSE, even if same as CBFS CSE.|ok"
+)
+
+declare -A picked
+
+while true; do
+  clear
+  echo -e "${BOLD}Which GBB flags would you like?${RESET}\n"
+
+  for i in "${!flags[@]}"; do
+    IFS="|" read -r name desc status <<< "${flags[$i]}"
+    num=$((i + 1))
+
+    if [[ $status == "unsupported" ]]; then
+      printf "%2d) %b%s%b, [Unsupported] %s\n\n" \
+        "$num" "$RED" "$name" "$RESET" "$desc"
+    else
+      printf "%2d) %s, %s\n\n" "$num" "$name" "$desc"
+    fi
+  done
+
+  if ((${#picked[@]})); then
+    echo -e "Current GBB flags selected: ${GREEN}${!picked[*]}${RESET}"
+  else
+    echo "Current GBB flags selected: None"
+  fi
+
+  echo -e "\nType the number corresponding to the flag (ONE at a time)."
+  read -ep "Select a GBB flag (or y to write said gbb flags): " sel
+
+if [[ $sel == "y" ]]; then
+  calculate_gbb_mask
+  echo -e "The desired GBB flags for what you chose is ${GREEN}$userchose${RESET}"
+  sleep 1
+  echo "Writing gbb flags, press ctrl c if you'd like to cancel"
+  sleep 5
+  futility gbb -s --flash --flags=$userchose
+  clear
+  echo "old $old"
+  echo "new flags: $userchose"
+  sleep 3
+  break
+fi
+
+if [[ $sel =~ ^[0-9]+$ ]] && (( sel >= 1 && sel <= ${#flags[@]} )); then
+  picked[$sel]=1
+  echo -e "${GREEN}You picked flag $sel${RESET}"
+else
+  echo -e "${RED}Invalid option${RESET}"
+  read -ep "Press enter to return :P"
+fi
+
+  sleep 1
+done
+else
+echo "YO, you need to disable write protection before setting gbb flags."
+sleep 3
+break
+fi
+done
+}
 fullpath="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 first2=$(echo "$fullpath" | cut -d/ -f-3)
 if [ "first2" = "/home/user" ]; then
     test=1
     break
 fi
-SCRIPT_DATE="[dec 17 2025]"
+SCRIPT_DATE="[dec 31 2025]"
 RED='\e[31m'
 RESET='\e[0m'
 GREEN='\e[32m'
@@ -17,34 +147,11 @@ BLUE='\e[34m'
 BOLD='\e[1m'
 RESET='\e[0m'
 BRIGHT_BLUE='\e[96m'
-echo -e "Installed payloads; ${BLUE}STIM, ${YELLOW}FMN, ${GREEN}debug bash${RESET}"
-echo -e "${YELLOW}MODS; ${RESET} None."
+echo -e "Installed payloads; ${BLUE}STIM, ${YELLOW}FMN, ${GREEN}debug bash, ${PURPLE}GBBFlagger, ${RED}WP Disable Loop, ${BRIGHT_BLUE}Unkeyroll${RESET}"
+echo -e "${YELLOW}MODS; ${RESET} Hardcoded Admin, No tut"
 echo -e "Made in ${PURPLE}$SCRIPT_DATE${RESET}"
 sleep 3
 clear
-while true; do
-sleep 1
-clear
-echo -e "                                                  ${BRIGHT_BLUE}TUTORIAL${RESET}"
-echo
-echo
-echo "To navigate through UI, type the number corresponding to the place you'd like to goto, then press enter. like here!"
-echo "1) Continue"
-read -ep "Which option would you like to goto? " tut
-case $tut in
-    1)
-    clear
-    echo -e "${GREEN}Nice!${RESET} Heading to ${BLUE}STIM,${RESET} please wait..."
-    sleep 4
-    break
-    ;;
-    *)
-    clear
-    echo "Not quite, try again."
-    sleep 1
-    ;;
-esac
-done
 if [ "$test" = "1" ]; then
 while true; do
 clear
@@ -65,8 +172,8 @@ case $warntest in
 esac
 done
 fi
-userroot=Guest
-userrootopposite=Admin
+userroot=Admin
+userrootopposite=Guest
 failedtries=0
 infmn=0
 while true; do
@@ -326,7 +433,7 @@ crossystem battery_cutoff_request=1 2>/dev/null
   fi
 else
          clear
-		echo "Login for debugging"
+		echo "Login for debugging, password is 2"
         echo -e "Type '1' as the pass if you wanna goto ${YELLOW}FMN${RESET} instead"
         echo -e "Failed tries ${RED}$failedtries${RESET}/3"
 		if [ "$test" = "1" ]; then
@@ -342,7 +449,7 @@ else
         break
         ;;
         
-        $goon)
+        2)
         clear
         echo -e "${GREEN}Success!"
         echo -e "${RESET}Restarting as ${GREEN}Admin,${RESET} please wait..."
@@ -482,6 +589,9 @@ echo "What would you like to do?"
     echo "1) Goto shell for debugging"
     echo -e "2) Login as ${RED}$userrootopposite${RESET}"
     echo "3) Reboot"
+	echo -e "4) ${PURPLE}GBBFlagger${RESET}"
+    echo -e "5) ${RED}WP Disable Loop${RESET}"
+    echo -e "6) ${BRIGHT_BLUE}Unkeyroll${RESET}"
 	read -ep "Choose Option: " userchoice
 case $userchoice in
         1)
@@ -513,6 +623,7 @@ echo -e "${BLUE} SSSSSSSSSSSSSSS    hhhhhhh     hhhhhhh    eeeeeeeeeeeeee llllll
         echo "Entering locked down mode, please wait..."
         sleep 3
         ;;
+        
         3)
          if [ "$test" = "1" ]; then
 echo -e "Since your in demo mode, this wont do anything but in the real ${BLUE}STIM${RESET} it will reboot your computer."
@@ -533,10 +644,39 @@ else
             reboot -f
             fi
             ;;
+            
+        5)
+        clear
+        echo -e "heading to the ${RED}WP Disable Loop${RESET} payload..."
+        sleep 1
+        wpdis
+        ;;
 
-        *)
+        6)
+        clear
+        echo -e "heading tothe ${BRIGHT_BLUE}Unkeyroll${RESET} payload..."
+        unkeyroll
+        ;;
+        
+		4)
+        clear
+		echo -e "heading to ${PURPLE}GBBFlagger...${RESET}"
+		sleep 1
+        calculate_gbb_mask() {
+  local mask=0
+
+  for sel in "${!picked[@]}"; do
+    (( mask |= (1 << (sel - 1)) ))
+  done
+
+  echo
+  printf -v userchose '0x%x\n' "$mask"
+}
+gbbflagger
+;;
+            *)
             read -ep "Invalid option, press enter to return :P"			
             ;;
     esac
     fi     
-    done
+done
