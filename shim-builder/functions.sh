@@ -230,6 +230,7 @@ inject_root(){
 	echo "Copying files.."
 	cp -r "$SCRIPT_DIR/../build/$TARGET_ARCH/." "$ROOT_MNT"
 	suppress cp -r "$SCRIPT_DIR/root/factory_install.sh" "$ROOT_MNT/usr/sbin/factory_install.sh"
+	suppress cp -r "$SCRIPT_DIR/root/dedede_recovery_v1.vbpubk" "$ROOT_MNT/usr/sbin/dedede_recovery_v1.vbpubk"
 	mkdir -p "$ROOT_MNT"/opt/kvs/bin
 	mv "$ROOT_MNT"/bin/is_ti50 "$ROOT_MNT"/opt/kvs/bin/is_ti50
 	echo 'export PATH=$PATH:/opt/kvs/bin' >> "$ROOT_MNT"/root/.bashrc
